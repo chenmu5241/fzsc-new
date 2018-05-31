@@ -436,6 +436,7 @@
 							var guigeCount = guigeJQ.children().length; //必选的规格数量
 							if(chooseLength == guigeCount) {
 								guigeJQ.next().find("a.addCard").removeClass("mui-disabled");
+								guigeJQ.next().find("a.addCard").attr("skuid",1)
 							} else {
 								guigeJQ.next().find("a.addCard").addClass("mui-disabled");
 							}
