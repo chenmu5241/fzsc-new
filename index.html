@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>品牌列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="css/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="css/icons-extra.css" />
+		<link rel="stylesheet" type="text/css" href="css/pulltorefresh.css" />
+		<link rel="stylesheet" type="text/css" href="css/app.css" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript">
+			if(myLocalStorage.getItem("member") == null) {
+				location.href = "../login.html"
+			}
+		</script>
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+		<script src="js/mui.zoom.js"></script>
+		<script src="js/mui.previewimage.js"></script>
+		<script src="js/clipboard-polyfill.js"></script>
+		<script src="js/vue.min.js"></script>
+		<script src="js/dateUtil.js"></script>
+		<style>
+			.mui-off-canvas-left,
+			.mui-off-canvas-right {
+				position: absolute;
+				z-index: -1;
+				top: 0;
+				bottom: 0;
+				visibility: hidden;
+				box-sizing: content-box;
+				width: 70%;
+				min-height: 100%;
+				background: #fff;
+				-webkit-overflow-scrolling: touch;
+			}
+			
+			.mui-btn {
+				padding: 10px;
+				margin-bottom: 3px;
+			}
+			
+			.mui-preview-image.mui-fullscreen {
+				position: fixed;
+				z-index: 20;
+				background-color: #000;
+			}
+			
+			.mui-preview-header,
+			.mui-preview-footer {
+				position: absolute;
+				width: 100%;
+				left: 0;
+				z-index: 10;
+			}
+			
+			.mui-preview-header {
+				height: 44px;
+				top: 0;
+			}
+			
+			.mui-preview-footer {
+				height: 50px;
+				bottom: 0px;
+			}
+			
+			.mui-preview-header .mui-preview-indicator {
+				display: block;
+				line-height: 25px;
+				color: #fff;
+				text-align: center;
+				margin: 15px auto 4;
+				width: 70px;
+				background-color: rgba(0, 0, 0, 0.4);
+				border-radius: 12px;
+				font-size: 16px;
+			}
+			
+			.mui-preview-image {
+				display: none;
+				-webkit-animation-duration: 0.5s;
+				animation-duration: 0.5s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
+			}
+			
+			.mui-preview-image.mui-preview-in {
+				-webkit-animation-name: fadeIn;
+				animation-name: fadeIn;
+			}
+			
+			.mui-preview-image.mui-preview-out {
+				background: none;
+				-webkit-animation-name: fadeOut;
+				animation-name: fadeOut;
+			}
+			
+			.mui-preview-image.mui-preview-out .mui-preview-header,
+			.mui-preview-image.mui-preview-out .mui-preview-footer {
+				display: none;
+			}
+			
+			.mui-zoom-scroller {
+				position: absolute;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				-webkit-backface-visibility: hidden;
+			}
+			
+			.mui-zoom {
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+			}
+			
+			.mui-slider .mui-slider-group .mui-slider-item img {
+				width: auto;
+				height: auto;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			
+			.mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+				width: 100%;
+			}
+			
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+				display: inline-table;
+			}
+			
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+				display: table-cell;
+				vertical-align: middle;
+			}
+			
+			.mui-preview-loading {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				display: none;
+			}
+			
+			.mui-preview-loading.mui-active {
+				display: block;
+			}
+			
+			.mui-preview-loading .mui-spinner-white {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -25px;
+				margin-top: -25px;
+				height: 50px;
+				width: 50px;
+			}
+			
+			.mui-preview-image img.mui-transitioning {
+				-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+				transition: transform 0.5s ease, opacity 0.5s ease;
+			}
+			
+			@-webkit-keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			
+			@-webkit-keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			
+			@keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			
+			p img {
+				max-width: 100%;
+				height: auto;
+			}
+			
+			.mui-slider .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item {
+				border-top: 1px solid #c8c7cc;
+			}
+			
+			.mui-btn {
+				padding: 2px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<!-- 菜单容器 -->
+				<aside id="offCanvasSide" class="mui-off-canvas-left">
+					<header class="mui-bar mui-bar-nav">
+						<h1 class="mui-title">选择品牌</h1>
+					</header>
+					<div id="offCanvasSideScroll" style="margin-top:44px" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<div class="mui-content">
+								<ul class="mui-table-view" id="brandVue">
+									<li class="mui-table-view-cell mui-media" v-for="(brand, index) in data" v-bind:key="brand.id" :brandid="brand.id">
+										<a>
+											<img class="mui-media-object mui-pull-left" :src="brand.logoImg | realImgPath">
+											<div class="mui-media-body">
+												{{brand.name }}
+												<p class='mui-ellipsis'>{{brand.description }}</p>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</aside>
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav" id="headerVue" v-cloak>
+					<a id="offCanvasBtn" href="#offCanvasSide" class="mui-icon mui-action-menu mui-icon-bars mui-pull-left"></a>
+					<h1 class="mui-title"></h1>
+					<div class="mui-title-div mui-pull-right" style="margin-right: 0px;">
+						<a id="toCard" class="mui-icon  mui-icon-extra mui-icon-extra-cart">
+							<template v-if="data.cartNum>0">
+								<span class="mui-badge cartNum" style="top: 5px; margin-left: -18px;">{{data.cartNum}}</span>
+							</template>
+						</a>
+						<a id="toMsgCenter" style="margin-left: 3px;" class="mui-icon mui-icon-chatboxes ">
+							<template v-if="data.msgNum>0">
+								<span class="mui-badge chatNum" style="top: 5px; margin-left: -18px;">{{data.msgNum }}</span>
+							</template>
+						</a>
+						<a id="toUserInfo" style="margin-left: 3px;" class="mui-icon mui-icon-person"></a>
+					</div>
+				</header>
+				<!-- 主页面内容容器 -->
+				<div class="mui-content">
+					<!-- off-canvas backdrop这里是为了用户点击主界面自动关闭侧滑页 -->
+					<div class="mui-off-canvas-backdrop"></div>
+					<div>
+						<div id="slider" class="mui-slider" style="min-height: 667px">
+							<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+								<a class="mui-control-item mui-active" href="#item1mobile"> 直播 </a>
+								<a class="mui-control-item" href="#item2mobile"> 预告 </a>
+							</div>
+							<div class="mui-slider-group">
+								<div id="item1mobile" class="mui-slider-item mui-control-content mui-active" style="border-bottom: hidden;">
+									<div class="mui-scroll-wrapper">
+										<div class="mui-scroll" id="refresh_container1">
+											<div class="mui-table-view" style="margin-top: 0px;" id="vue1" v-cloak>
+												<div class="mui-row">
+													<div class="mui-card mui-car-url" v-for="(brand, index) in data" v-bind:key="brand.id">
+														<div class="mui-card-content">
+															<div class="mui-card-content-inner">
+																<h2>{{brand.name}}</h2>
+																<p style="color: #333;">抢购活动于{{brand.activeStart | dateToStr("yyyy-MM-dd")}}[星期{{brand.activeStart | datePart}}]开始至{{brand.activeEnd | dateToStr("yyyy-MM-dd")}}[星期{{brand.activeEnd | datePart}}]结束</p>
+																<p class="mui-ellipsis-2">{{brand.activeContent}}</p>
+																<p style="color: #333;">
+																	<a class="expendbtn">展开全文</a>
+																</p>
+															</div>
+														</div>
+														<div class="mui-card-header mui-card-media" style="z-index: 1;">
+															<div class="mui-row">
+																<div class="mui-col-sm-4 mui-col-xs-4" v-for="(img, index) in brand.brandImgs" v-bind:key="img.id">
+																	<img :src="img.url | realImgPath" width="100%" style="padding: 0 1px;" data-preview-src="" :data-preview-group="brand.id" />
+																</div>
+															</div>
+														</div>
+														<div class="mui-row mui-pull-right">
+															<a class="mui-btn mui-btn-danger buy" :brandid="brand.id">去抢购</a>
+															<a class="mui-btn mui-btn-danger shareBtn" style="margin-left: 5px; margin-right: 5px;">转发</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="item2mobile" class="mui-slider-item mui-control-content" style="border-bottom: hidden;">
+									<div class="mui-scroll-wrapper">
+										<div class="mui-scroll" id="refresh_container2">
+											<div class="mui-table-view" style="margin-top: 0px;">
+												<div class="mui-row" id="vue2" v-cloak>
+													<div class="mui-card mui-car-url" v-for="(brand, index) in data" v-bind:key="brand.id">
+														<div class="mui-card-content">
+															<div class="mui-card-content-inner">
+																<h2>{{brand.name}}</h2>
+																<p style="color: #333;">抢购活动于{{brand.activeStart | dateToStr("yyyy-MM-dd")}}[星期{{brand.activeStart | datePart}}]开始至{{brand.activeEnd | dateToStr("yyyy-MM-dd")}}[星期{{brand.activeEnd | datePart}}]结束</p>
+																<p class="mui-ellipsis-2">{{brand.activeContent}}</p>
+																<p style="color: #333;">
+																	<a class="expendbtn">展开全文</a>
+																</p>
+															</div>
+														</div>
+														<div class="mui-card-header mui-card-media" style="z-index: 1;">
+															<div class="mui-row">
+																<div class="mui-col-sm-4 mui-col-xs-4" v-for="(img, index) in brand.brandImgs" v-bind:key="img.id">
+																	<img :src="img.url | realImgPath" width="100%" style="padding: 0 1px;" data-preview-src="" :data-preview-group="brand.id" />
+																</div>
+															</div>
+														</div>
+														<div class="mui-row mui-pull-right">
+															<!-- <a class="mui-btn mui-btn-danger buy">去抢购</a> -->
+															<a class="mui-btn mui-btn-danger shareBtn" style="margin-left: 5px; margin-right: 5px;">转发</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			Vue.filter("dateToStr", function(longtime, formatString) {
+				return dateUtil.dateToStr(new Date(longtime), formatString);
+			})
+			Vue.filter("realImgPath", function(img) {
+				return baseUplod + img;
+			})
+			/**
+			 * 取得日期数据信息 参数 interval 表示数据类型 y 年 M月 d日 w星期 ww周 h时 n分 s秒
+			 */
+			Vue.filter("datePart", function(longtime, interval) {
+				return dateUtil.datePart('w', new Date(longtime));
+			})
+			//加载数据方法
+			var pageVo1 = {
+				pageNumber: 1,
+				pageSize: 3,
+				type: 1
+			}
+			var pageVo2 = {
+				pageNumber: 1,
+				pageSize: 3,
+				type: 2
+			}
+
+			var headerVue = new Vue({
+				el: "#headerVue",
+				data: {
+					data: {
+						cartNum: 0,
+						msgNum: 0
+					}
+				}
+			})
+
+			var brandVue = new Vue({
+				el: "#brandVue",
+				data: {
+					data: []
+				}
+			})
+			var vue1 = new Vue({
+				el: '#vue1',
+				data: {
+					data: []
+				},
+				updated: function() {
+					this.$nextTick(function() {
+						//如果无隐藏文字则不显示展开按钮
+						$(".mui-ellipsis-2").each(function() {
+							if(!isEllipsis(this)) {
+								$(this).next().remove();
+							}
+						})
+					})
+				}
+			});
+
+			var vue2 = new Vue({
+				el: '#vue2',
+				data: {
+					data: []
+				},
+				updated: function() {
+					this.$nextTick(function() {
+						//如果无隐藏文字则不显示展开按钮
+						$(".mui-ellipsis-2").each(function() {
+							if(!isEllipsis(this)) {
+								$(this).next().remove();
+							}
+						})
+					})
+				}
+			});
+			//是否已出现省略号
+			function isEllipsis(dom) {
+				if(dom.scrollHeight > dom.clientHeight) {
+					return true
+				}
+				return false;
+			};
+
+			function initHeight() {
+				var titleH = $(".mui-title").height();
+				var sliderCH = $("#sliderSegmentedControl").height();
+				var dh = $(window).height();
+				$(".mui-control-content").css("height", dh - titleH - sliderCH);
+			}
+
+			function loadBrandAll() {
+				$.ajax({
+					dataType: "json",
+					type: "post",
+					url: basePath + "brand/loadBrandAll",
+					success: function(result) {
+						if(result.success) {
+							brandVue.data = result.data;
+						} else {
+							mui.toast(result.message)
+						}
+					},
+					error: function(result) {
+						//mui.toast("请求遇到问题!")
+					}
+				});
+			}
+
+			function initHeader() {
+				$.ajax({
+					dataType: "json",
+					type: "post",
+					url: basePath + "loadHeaderNum",
+					data: {
+						memberId: myLocalStorage.getItem("member").id
+					},
+					success: function(result) {
+						if(result.success) {
+							headerVue.data = result.data;
+						} else {
+							mui.toast(result.message)
+						}
+					},
+					error: function(result) {}
+				});
+			}
+
+			mui.init({
+				swipeBack: false
+			});
+			mui.ready(function() {
+				var previewImage = mui.previewImage(); //图片预览
+				//重写返回按钮
+				var backButtonPress = 0;
+				mui.back = function(event) {
+					if($(".mui-preview-in").length > 0) {
+						previewImage.close();
+						return false;
+					}
+
+					backButtonPress++;
+					if(backButtonPress > 1) {
+						plus.runtime.quit();
+					} else {
+						plus.nativeUI.toast('再按一次退出应用');
+					}
+					setTimeout(function() {
+						backButtonPress = 0;
+					}, 1000);
+					return false;
+				};
+
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: true
+					//是否显示滚动条
+				});
+
+				//直播刷新组件对象
+				var pullToRefresh1 = mui('#refresh_container1').pullToRefresh({
+					down: {
+						callback: function() {
+							var _self = this;
+							setTimeout(function() {
+								pageVo1.pageNumber = 1;
+								$.ajax({
+									dataType: "json",
+									type: "post",
+									url: basePath + "brand/getList",
+									data: pageVo1,
+									success: function(result) {
+										if(result.success) {
+											vue1.data = result.data;
+											pageVo1.pageNumber += 1;
+											_self.endPullDownToRefresh();
+											_self.refresh(true);
+										} else {
+											mui.toast(result.message)
+										}
+
+									},
+									error: function(result) {
+										mui.toast("请求遇到问题!")
+									}
+								});
+							}, 500);
+						}
+					},
+					up: {
+						auto: true, //默认执行一次上拉加载
+						callback: function() {
+							var _self = this;
+							setTimeout(function() {
+								$.ajax({
+									dataType: "json",
+									type: "post",
+									url: basePath + "brand/getList",
+									data: pageVo1,
+									success: function(result) {
+										if(result.success) {
+											vue1.data = vue1.data.concat(result.data); //把数组合并的结果设置成新值
+											_self.endPullUpToRefresh(result.pages <= pageVo1.pageNumber);
+											pageVo1.pageNumber += 1;
+										} else {
+											mui.toast(result.message)
+										}
+									},
+									error: function(result) {
+										mui.toast("请求遇到问题!")
+									}
+								});
+							}, 500);
+						}
+					}
+				});
+
+				// 预告组件对象
+				var pullToRefresh2 = mui('#refresh_container2').pullToRefresh({
+					down: {
+						callback: function() {
+							var _self = this;
+							setTimeout(function() {
+								pageVo2.pageNumber = 1;
+								$.ajax({
+									dataType: "json",
+									type: "post",
+									url: basePath + "brand/getList",
+									data: pageVo2,
+									success: function(result) {
+										if(result.success) {
+											vue2.data = result.data;
+											pageVo2.pageNumber += 1;
+											_self.endPullDownToRefresh();
+											_self.refresh(true);
+										} else {
+											mui.toast(result.message)
+										}
+									},
+									error: function(result) {
+										mui.toast("请求遇到问题!")
+									}
+								});
+							}, 500);
+						}
+					},
+					up: {
+						auto: true, //默认执行一次上拉加载
+						callback: function() {
+							var _self = this;
+							setTimeout(function() {
+								$.ajax({
+									dataType: "json",
+									type: "post",
+									url: basePath + "brand/getList",
+									data: pageVo2,
+									success: function(result) {
+										if(result.success) {
+											vue2.data = vue2.data.concat(result.data); //把数组合并的结果设置成新值
+											pageVo2.pageNumber += 1;
+											_self.endPullUpToRefresh(result.pages <= pageVo1.pageNumber);
+										} else {
+											mui.toast(result.message)
+										}
+									},
+									error: function(result) {
+										mui.toast("请求遇到问题!")
+									}
+								});
+							}, 500);
+						}
+					}
+				});
+				//更新购物车
+				initHeader();
+				//加载品牌列表
+				loadBrandAll();
+				//到商品列表页面
+				mui("body").on("tap", ".buy", function() {
+					myLocalStorage.setItem("brandId", $(this).attr("brandid"))
+					mui.openWindow({
+						url: "html/goods_list.html",
+						id: "goodsList"
+					})
+				})
+
+				//分享
+				mui("body").on("tap", ".shareBtn", function() {
+					clipboard.writeText("【特步童装】针织上衣6879496494646,活动价格80.00")
+					mui.confirm("文字内容已复制到剪切板", "提示", ["确定", "取消"], function(e) {
+						if(e.index == 0) {
+							var pictures = [];
+							$("#slider").find("img").each(function() {
+								pictures.push(this.src);
+							})
+							plus.share.sendWithSystem({
+								pictures: pictures,
+								content: '分享内容',
+								href: 'http://www.dcloud.io/'
+							}, function() {
+								console.log('分享成功');
+							}, function(e) {
+								console.log('分享失败：' + JSON.stringify(e));
+							});
+						}
+					})
+				})
+
+				//折叠面板中的按钮触发事件
+				mui("#offCanvasSideScroll").on("tap", "li", function() {
+					myLocalStorage.setItem("brandId", $(this).attr("brandid"))
+					mui.openWindow({
+						url: "html/goods_list.html",
+						id: "goodsList"
+					})
+				})
+
+				mui("body").on("tap", ".expendbtn", function() {
+					if($(this).text() == "展开全文") {
+						$(this).parent().prev().removeClass("mui-ellipsis-2");
+						$(this).text("收起全文");
+					} else {
+						$(this).parent().prev().addClass("mui-ellipsis-2");
+						$(this).text("展开全文");
+					}
+
+				})
+
+				//到购物车
+				mui("body").on("tap", "#toCard", function() {
+					mui.openWindow({
+						url: "html/card.html",
+						id: "card"
+					})
+				})
+				//到个人中心
+				mui("body").on("tap", "#toUserInfo", function() {
+					mui.openWindow({
+						url: "html/userinfo.html",
+						id: "userinfo"
+					})
+				})
+				//到消息中心
+				mui("body").on("tap", "#toMsgCenter", function() {
+					mui.openWindow({
+						url: "html/msgCenter.html",
+						id: "msgCenter"
+					})
+				})
+
+				//刷新角标数字
+				window.addEventListener("refreshCartNum", function(event) {
+					refreshCartNum(event.detail.num);
+				})
+				window.addEventListener("refreshChatNum", function(event) {
+					refreshChatNum(event.detail.num);
+				})
+			})
+
+			//手机app特殊接口
+			mui.plusReady(function() {
+				//首先获得目标页面的对象
+				var indexWv = null;
+				var userinfoWv = null;
+				var goodsDetailWV = null;
+				//定时刷新消息的角标内容
+				setInterval(function() {
+					if(indexWv == null) {
+						indexWv = plus.webview.getWebviewById('index');
+					}
+					if(userinfoWv == null) {
+						userinfoWv = plus.webview.getWebviewById('userinfo');
+					}
+					if(goodsDetailWV == null) {
+						goodsDetailWV = plus.webview.getWebviewById('goods_detail.html');
+					}
+					if(indexWv != null) {
+						mui.fire(indexWv, 'refreshCartNum', {
+							//自定义事件参数
+							num: '5'
+						});
+						mui.fire(indexWv, 'refreshChatNum', {
+							//自定义事件参数
+							num: '5'
+						});
+					}
+
+					if(userinfoWv != null) {
+						mui.fire(userinfoWv, 'refreshCartNum', {
+							//自定义事件参数
+							num: '5'
+						});
+						mui.fire(userinfoWv, 'refreshChatNum', {
+							//自定义事件参数
+							num: '5'
+						});
+					}
+					if(goodsDetailWV != null) {
+						mui.fire(goodsDetailWV, 'refreshCartNum', {
+							//自定义事件参数
+							num: '5'
+						});
+						mui.fire(goodsDetailWV, 'refreshChatNum', {
+							//自定义事件参数
+							num: '5'
+						});
+					}
+				}, 10000);
+
+			})
+		</script>
+	</body>
+
+</html>
