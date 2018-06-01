@@ -36,7 +36,7 @@
 				bottom: 0;
 				visibility: hidden;
 				box-sizing: content-box;
-				width: 70%;
+				width: 80%;
 				min-height: 100%;
 				background: #fff;
 				-webkit-overflow-scrolling: touch;
@@ -284,7 +284,7 @@
 											<span style="font-size: 12px;margin-left: 5px;">{{saleAttr.attr}}</span>
 											<div class="mui-row " style="border: 1px #EEEEEE dashed;padding:5px 5px 3px 5px;">
 												<div class="mui-col-sm-3 mui-col-xs-3 mui-text-left" v-for="(saleAttrValue, index) in saleAttr.saleAttrValues">
-													<a class="mui-btn"  v-bind:class="{'mui-disabled': saleAttrValue.avalibleNum==0}">{{saleAttrValue.attrValue}}</a>
+													<a class="mui-btn" :avalibleNum="saleAttrValue.avalibleNum" :attr="saleAttr.attr" :skuids="saleAttrValue.skuIds" :attrvalue="saleAttrValue.attrValue" v-bind:class="{'mui-disabled': saleAttrValue.avalibleNum==0}">{{saleAttrValue.attrValue}}</a>
 												</div>
 											</div>
 										</div>
@@ -311,83 +311,38 @@
 							<h1 class="mui-title">筛选</h1>
 						</header>
 						<div class="mui-content">
-							<div class="mui-card" id="filter">
+							<div class="mui-card" id="filter" v-cloak>
 								<ul class="mui-table-view">
-									<li class="mui-table-view-cell mui-collapse mui-active">
-										<a class="mui-navigate-right">颜色</a>
+									<template v-if="data.categorysList.length>0">
+										<li class="mui-table-view-cell mui-collapse mui-active">
+											<a class="mui-navigate-right">选择分类</a>
+											<div class="mui-collapse-content">
+												<div class="mui-row" v-for="(categorys, index) in data.categorysList">
+													<div class="mui-col-sm-4 mui-col-xs-4" v-for="(category, index) in categorys">
+														<a class="mui-btn"  :categoryid="category.id">
+															{{category.name}}
+														</a>
+													</div>
+												</div>
+											</div>
+										</li>
+									</template>
+								</ul>
+								<ul class="mui-table-view" id="dynamicAttr">
+									<li class="mui-table-view-cell mui-collapse mui-active" v-for="(attr, index) in data.attrList">
+										<a class="mui-navigate-right" href="#">{{attr.attr}}</a>
 										<div class="mui-collapse-content">
 											<div class="mui-row">
-												<div class="mui-col-sm-2 mui-col-xs-3">
-													<a class="mui-btn">
-														红色
-													</a>
-												</div>
-												<div class="mui-col-sm-2 mui-col-xs-3">
-													<a class="mui-btn">
-														黑色
-													</a>
-												</div>
-												<div class="mui-col-sm-2 mui-col-xs-3">
-													<a class="mui-btn">
-														黄色
-													</a>
-												</div>
-												<div class="mui-col-sm-2 mui-col-xs-3">
-													<a class="mui-btn">
-														蓝色
+												<div class="mui-col-sm-3 mui-col-xs-3" v-for="(value, index) in attr.values">
+													<a class="mui-btn" :skuids="value.skuIds">
+														{{value.attrValue}}
 													</a>
 												</div>
 											</div>
 										</div>
 									</li>
 								</ul>
-								<ul class="mui-table-view">
-									<li class="mui-table-view-cell mui-collapse mui-active">
-										<a class="mui-navigate-right" href="#">尺码</a>
-										<div class="mui-collapse-content">
-											<div class="mui-row">
-												<div class="mui-col-sm-3 mui-col-xs-3">
-													<a class="mui-btn">
-														36
-													</a>
-												</div>
-												<div class="mui-col-sm-3 mui-col-xs-3">
-													<a class="mui-btn">
-														37
-													</a>
-												</div>
-												<div class="mui-col-sm-3 mui-col-xs-3">
-													<a class="mui-btn">
-														38
-													</a>
-												</div>
-												<div class="mui-col-sm-3 mui-col-xs-3">
-													<a class="mui-btn">
-														39
-													</a>
-												</div>
-												<div class="mui-col-sm-3 mui-col-xs-3">
-													<a class="mui-btn">
-														40
-													</a>
-												</div>
-												<div class="mui-col-sm-3 mui-col-xs-3">
-													<a class="mui-btn">
-														41
-													</a>
-												</div>
-												<div class="mui-col-sm-3 mui-col-xs-3">
-													<a class="mui-btn">
-														42
-													</a>
-												</div>
-											</div>
-										</div>
-									</li>
-								</ul>
-
 							</div>
-
 						</div>
 					</div>
 				</div>
@@ -403,7 +358,9 @@
 			var pageVo1 = {
 				pageNumber: 1,
 				pageSize: 3,
-				brandId: myLocalStorage.getItem("brandId")
+				brandId: myLocalStorage.getItem("brandId"),
+				categoryIds:"",
+				dynamicSql:""
 			}
 
 			Vue.filter("realImgPath", function(img) {
@@ -419,6 +376,18 @@
 					}
 				}
 			})
+			var filterVue = new Vue({
+				el: "#filter",
+				data: {
+					data: {
+						categorysList: [],
+						attrList: []
+					}
+				},
+				updated: function() {
+					this.$nextTick(function() {})
+				}
+			})
 
 			var vue1 = new Vue({
 				el: '#vue1',
@@ -430,13 +399,46 @@
 						//选择尺码
 						mui(".guige").on("tap", ".mui-btn", function() {
 							$(this).addClass("mui-btn-warning");
+							$(this).parent().siblings().find("[avaliblenum]").each(function() { //和点击按钮同层次的其他按钮有库存的点亮
+								if($(this).attr("avaliblenum") > 0) {
+									$(this).removeClass("mui-disabled")
+								}
+							})
+
+							var chooseSkuIds = $(this).attr("skuids").split(",");
+							$(this).parent().parent().parent().siblings().find("[skuids]").each(function() {
+								var otherSkuIds = $(this).attr("skuids").split(",");
+								var flag = false;
+								for(var i = 0; i < chooseSkuIds.length; i++) {
+									var skuKucun = chooseSkuIds[i].split(":");
+									var skuId = skuKucun[0]; //真实skuid
+									var num = skuKucun[1]; //sku的库存
+									for(var j = 0; j < otherSkuIds.length; j++) {
+										var skuKucunj = otherSkuIds[j].split(":");
+										var skuIdj = skuKucunj[0]; //真实skuid
+										var numj = skuKucunj[1]; //sku的库存
+										if(skuId == skuIdj && num > 0) {
+											flag = true;
+											break
+										}
+									}
+								}
+								if(flag) {
+									//$(this).removeClass("mui-btn-warning");
+									$(this).removeClass("mui-disabled");
+								} else {
+									$(this).removeClass("mui-btn-warning");
+									$(this).addClass("mui-disabled");
+								}
+
+							})
+
 							$(this).parent().siblings().find(".mui-btn").removeClass("mui-btn-warning");
 							var guigeJQ = $(this).parent().parent().parent().parent();
 							var chooseLength = guigeJQ.find("a.mui-btn-warning").length; //选中的数量
 							var guigeCount = guigeJQ.children().length; //必选的规格数量
 							if(chooseLength == guigeCount) {
 								guigeJQ.next().find("a.addCard").removeClass("mui-disabled");
-								guigeJQ.next().find("a.addCard").attr("skuid", 1)
 							} else {
 								guigeJQ.next().find("a.addCard").addClass("mui-disabled");
 							}
@@ -464,9 +466,68 @@
 				});
 			}
 
+			function initSider() {
+				$.ajax({
+					dataType: "json",
+					type: "post",
+					url: basePath + "goods/loadSider",
+					data: {
+						brandId: myLocalStorage.getItem("brandId")
+					},
+					success: function(result) {
+						if(result.success) {
+							filterVue.data = result.data;
+						} else {
+							mui.toast(result.message)
+						}
+					},
+					error: function(result) {}
+				});
+			}
+
+			function setDynamicSql(){
+				var categoryIds = []
+				$("#filter").find("[categoryid].mui-btn-warning").each(function(){
+					var categoryId = $(this).attr("categoryid");
+					categoryIds.push(categoryId)
+				})
+				var attrValues = []
+/*				$("#filter").find("[attrvalue].mui-btn-warning").each(function(){
+					var attrvalue = $(this).attr("attrvalue");
+					attrValues.push(attrvalue)
+				})*/
+				var ddynamicSqlArr = [];
+				$("#dynamicAttr").children().each(function(){
+					var tempArr = [];
+					$(this).find("[skuids].mui-btn-warning").each(function(){
+						var skuids = $(this).attr("skuids");
+						tempArr.push(skuids)
+					})
+					if(tempArr.length>0){
+						var tempStr = tempArr.join();
+						var andStr = "FIND_IN_SET(gsa.goods_sku_id  ,\'"+tempStr+"\')";
+						ddynamicSqlArr.push(andStr);
+					}
+
+				})
+				
+				pageVo1.dynamicSql = ddynamicSqlArr.join(" and ");
+				//pageVo1.attrValues = attrValues.join();
+				pageVo1.categoryIds = categoryIds.join();
+				console.log(pageVo1.dynamicSql);
+				pullToRefresh.pullDownLoading();
+				
+			}
+
+
+
+
+/********mui初始化之后的事件绑定*************************/
+			var pullToRefresh = null;
 			mui.init();
 			mui.ready(function() {
 				initHeader();
+				initSider();
 				var previewImage = mui.previewImage(); //图片预览
 
 				//重写返回按钮
@@ -493,7 +554,7 @@
 				}); //初始化scroll组件
 
 				//刷新组件对象
-				var pullToRefresh = mui('#refresh_container').pullToRefresh({
+				pullToRefresh = mui('#refresh_container').pullToRefresh({
 					down: {
 						callback: function() {
 							var _self = this;
@@ -557,6 +618,7 @@
 					} else {
 						$(this).addClass("mui-btn-warning")
 					}
+					setDynamicSql();
 				})
 
 				//分享
@@ -592,17 +654,40 @@
 				$("body").on("tap", ".addCard", function() {
 					var skuAttrValues = [];
 					var goodsId = $(this).attr("goodsId");
-					$(this).parent().prev().children().each(function(){
-						var skuAttrValue = {};
-						var attr = $(this).children(":eq(0)").text();
-						var attrValue = $(this).find(".mui-btn-warning").text();
-						skuAttrValue.attr = attr;
-						skuAttrValue.attrValue = attrValue;
-						skuAttrValue.goodsId = goodsId;
-						skuAttrValues.push(skuAttrValue);
-						
+
+					var skuidsAll = []
+					$(this).parent().prev().find("a.mui-btn-warning").each(function() {
+						skuidsAll.push($(this).attr("skuids").split(","))
 					})
-					mui.toast("加购物车成功")
+
+					var interArray = null;
+					for(var i = 0; i < skuidsAll.length - 1; i++) {
+						if(i == 0) {
+							interArray = Array.intersect(skuidsAll[0], skuidsAll[i + 1]);
+						} else {
+							interArray = Array.intersect(interArray, skuidsAll[i + 1]);
+						}
+					}
+					var skuId = interArray[0].split(":")[0]; //得到skuId
+					$.ajax({
+						dataType: "json",
+						type: "post",
+						url: basePath + "/card/addCard",
+						data: {
+							skuId: skuId,
+							memberId: myLocalStorage.getItem("member").id
+						},
+						success: function(result) {
+							if(result.success) {
+								mui.toast("加购物车成功");
+								headerVue.data.cartNum = result.data;
+							} else {
+								mui.toast(result.message)
+							}
+						},
+						error: function(result) {}
+					});
+
 				})
 				//侧滑容器父节点
 				var offCanvasWrapper = mui('#offCanvasWrapper');
@@ -610,9 +695,11 @@
 				document.getElementById('offCanvasHide').addEventListener('tap', function() {
 					offCanvasWrapper.offCanvas('close');
 				});
+				var temp = 1;
 				//隐藏策划页面
 				document.getElementById('reset').addEventListener('tap', function() {
 					$("#filter").find(".mui-btn").removeClass("mui-btn-warning");
+					setDynamicSql();
 				});
 
 			});
