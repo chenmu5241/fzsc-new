@@ -290,7 +290,7 @@
 										</div>
 									</div>
 									<div class="mui-row">
-										<a class="mui-btn mui-btn-danger mui-pull-right addCard mui-disabled" :goodsid="goods.id">加购物车</a>
+										<a class="mui-btn mui-btn-danger mui-pull-right addCart mui-disabled" :goodsid="goods.id">加购物车</a>
 									</div>
 
 								</div>
@@ -438,9 +438,9 @@
 							var chooseLength = guigeJQ.find("a.mui-btn-warning").length; //选中的数量
 							var guigeCount = guigeJQ.children().length; //必选的规格数量
 							if(chooseLength == guigeCount) {
-								guigeJQ.next().find("a.addCard").removeClass("mui-disabled");
+								guigeJQ.next().find("a.addCart").removeClass("mui-disabled");
 							} else {
-								guigeJQ.next().find("a.addCard").addClass("mui-disabled");
+								guigeJQ.next().find("a.addCart").addClass("mui-disabled");
 							}
 						})
 					})
@@ -544,7 +544,7 @@
 				//到购物车
 				mui("body").on("tap", "#toCard", function() {
 					mui.openWindow({
-						url: "./card.html",
+						url: "./cart.html",
 						id: "card"
 					})
 				})
@@ -651,7 +651,7 @@
 					})
 				})
 				//加购物车
-				$("body").on("tap", ".addCard", function() {
+				$("body").on("tap", ".addCart", function() {
 					var skuAttrValues = [];
 					var goodsId = $(this).attr("goodsId");
 
@@ -672,7 +672,7 @@
 					$.ajax({
 						dataType: "json",
 						type: "post",
-						url: basePath + "/card/addCard",
+						url: basePath + "/card/addCart",
 						data: {
 							skuId: skuId,
 							memberId: myLocalStorage.getItem("member").id

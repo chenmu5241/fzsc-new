@@ -316,7 +316,7 @@
 				<span class="mui-icon mui-icon-chatbubble"></span>
 				<span class="mui-tab-label">联系客服</span>
 			</a>
-			<a id="confirmAddCard" style="top: 0px;color: white;" class="mui-tab-item mui-btn mui-btn-danger">加入购物车</a>
+			<a id="confirmAddCart" style="top: 0px;color: white;" class="mui-tab-item mui-btn mui-btn-danger">加入购物车</a>
 		</nav>
 		<div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
 			<header class="mui-bar mui-bar-nav">
@@ -493,7 +493,7 @@
 				//到购物车页面
 				mui("body").on("tap", "#toCard", function() {
 					mui.openWindow({
-						url: "card.html",
+						url: "cart.html",
 						id: "card"
 					})
 				})
@@ -505,7 +505,7 @@
 					})
 				})
 
-				mui("body").on("tap", "#confirmAddCard", function() {
+				mui("body").on("tap", "#confirmAddCart", function() {
 					mui.toast("商品已加入购物车!")
 					var num = parseInt($(".mui-icon-extra-cart").children("span").text()) + 1;
 					$(".mui-icon-extra-cart").children("span").text(num);

@@ -1,8 +1,8 @@
 (function(window) {
-	window.basePath = "http://192.168.1.154:8080/fz-app/";
-	window.baseUpload = "http://192.168.1.154:8080/fz-upload/"; //全局记录服务器端地址
-	/*	window.basePath  = "http://192.168.2.100:8080/fz-app/";
-		window.baseUpload = "http://192.168.2.100:8080/fz-upload/";//全局记录服务器端地址*/
+	/*window.basePath = "http://192.168.1.154:8080/fz-app/";
+	window.baseUpload = "http://192.168.1.154:8080/fz-upload/"; //全局记录服务器端地址*/
+		window.basePath  = "http://192.168.2.100:8080/fz-app/";
+		window.baseUpload = "http://192.168.2.100:8080/fz-upload/";//全局记录服务器端地址
 
 	//封装localStorage
 	window.myLocalStorage = {};
