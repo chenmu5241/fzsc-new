@@ -139,3 +139,7 @@
 
 
 }(window))
+
+Vue.filter("realImgPath", function(img) {
+	return baseUpload + img;
+})

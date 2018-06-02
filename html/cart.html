@@ -5,7 +5,6 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>购物车</title>
-		<script src="../js/app.js"></script>
 		<link href="../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
 		<link rel="stylesheet" type="text/css" href="../css/icons-extra.css" />
@@ -13,6 +12,7 @@
 		<script src="../js/mui.js"></script>
 		<script src="../js/jquery.min.js"></script>
 		<script src="../js/vue.min.js"></script>
+		<script src="../js/app.js"></script>
 		<script type="text/javascript">
 			if(!isLogin()) {
 				location.href = "../login.html";
@@ -46,7 +46,6 @@
 								</div>
 								<div class="mui-col-sm-8 mui-col-xs-8">
 									<p class='mui-ellipsis-2' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【{{cart.goods.brandName}}】{{cart.goods.name}}{{cart.goods.code}}</p>
-
 									<p style="margin-left: 5px; margin-bottom: 0px;font-size: 12px;" v-for="(aleAttr, index) in cart.saleAttrs" :key="aleAttr.id">{{aleAttr.attr}}:{{aleAttr.saleAttrValues[0].attrValue}}</p>
 									<div class="mui-row">
 										<div class="mui-col-sm-5 mui-col-xs-5">
@@ -110,16 +109,13 @@
 	</body>
 
 	<script>
-		Vue.filter("realImgPath", function(img) {
-			return baseUpload + img;
-		})
+
 		Vue.filter("perPrice", function(goods) {
 			if(myLocalStorage.getItem("member").vip == 0) {
 				return goods.promotionPrice;
 			} else {
 				return goods.vipPrice;
 			}
-
 		})
 
 		var cartVue = new Vue({
@@ -151,9 +147,9 @@
 			var amount = 0;
 			$("#mui-content").find(":checkbox:checked").each(function() {
 				var sku = {};
-				var skuId = $(this).val();
+				var goodsSkuId = $(this).val();
 				var perprice = $(this).attr("perprice");
-				sku.skuId = skuId;
+				sku.goodsSkuId = goodsSkuId;
 				sku.num = $(this).parent().parent().children(":eq(1)").find("input").val();
 				amount += perprice * sku.num;
 				jiesuanData.skus.push(sku);
