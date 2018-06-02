@@ -12,11 +12,6 @@
 		<script src="../js/mui.min.js "></script>
 		<script src="../js/jquery.min.js"></script>
 		<script src="../js/app.js"></script>
-		<script type="text/javascript">
-			if(!isLogin()) {
-				location.href = "../login.html";
-			}
-		</script>
 		<style>
 			html,
 			body {
@@ -62,7 +57,7 @@
 			<a class="mui-action-back mui-icon mui-icon-arrowthinleft"></a>
 			<h1 class="mui-title">个人中心</h1>
 			<div class="mui-title-div mui-pull-right">
-				<a id="toCard" class="mui-icon  mui-icon-extra mui-icon-extra-cart"><span class="mui-badge cartNum" style="top:5px;    margin-left:-18px;">1</span></a>
+				<a id="toCartBtn" class="mui-icon  mui-icon-extra mui-icon-extra-cart"><span class="mui-badge cartNum" style="top:5px;    margin-left:-18px;">1</span></a>
 				<a id="toMsgCenter" style="margin-left: 3px;" class="mui-icon mui-icon-chatboxes"><span class="mui-badge chatNum" style="top:5px; margin-left:-18px;">1</span></a>
 			</div>
 		</header>
@@ -71,7 +66,7 @@
 		<div class="mui-content">
 			<ul class="mui-table-view mui-table-view-chevron">
 				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right" href="setting.html">
+					<a class="mui-navigate-right" id="setting">
 						<img class="mui-media-object mui-pull-left head-img" id="head-img" src="../images/kf.jpg">
 						<div class="mui-media-body">
 							熊园昆
@@ -105,7 +100,7 @@
 					</div>
 				</div>
 			</div>
-<!--			<ul class="mui-table-view mui-table-view-chevron">
+			<!--			<ul class="mui-table-view mui-table-view-chevron">
 				<li class="mui-table-view-cell ">
 					<a>账户余额：<span style="color: red;">¥ 22.00</span></a>
 					<a class="mui-btn mui-btn-primary">充值</a>
@@ -126,22 +121,22 @@
 					<a onclick="mui.toast('功能暂未开放')" class="mui-navigate-right">升级vip</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a href="address.html" class="mui-navigate-right">收货地址管理</a>
+					<a  id="address" class="mui-navigate-right">收货地址管理</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a href="shuoming.html" class="mui-navigate-right">上线说明</a>
+					<a  id="shuoming" class="mui-navigate-right">上线说明</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a href="baodianbidu.html" class="mui-navigate-right">宝典必读</a>
+					<a  id="baodianbidu" class="mui-navigate-right">宝典必读</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a href="chat.html" class="mui-navigate-right">联系客服</a>
+					<a  id="chat" class="mui-navigate-right">联系客服</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a href="feedback.html" class="mui-navigate-right">意见反馈</a>
+					<a  id="feedback" class="mui-navigate-right">意见反馈</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a href="about.html" class="mui-navigate-right">关于</a>
+					<a  id="about" class="mui-navigate-right">关于</a>
 				</li>
 			</ul>
 
@@ -154,13 +149,63 @@
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
 		mui.ready(function() {
-			//到购物车
-			document.getElementById("toCard").addEventListener("tap", function() {
+			mui("body").on("tap", "#toCartBtn", function() {
 				mui.openWindow({
 					url: "cart.html",
 					id: "card"
 				})
 			})
+			mui("body").on("tap", "#setting", function() {
+				mui.openWindow({
+					url: "setting.html",
+					id: "setting"
+				})
+			})
+			//都地址管理
+			mui("body").on("tap","#address",function(){
+				mui.openWindow({
+					url: "address.html",
+					id: "address"
+				})
+			})
+			//说明
+			mui("body").on("tap","#shuoming",function(){
+				mui.openWindow({
+					url: "shuoming.html",
+					id: "shuoming"
+				})
+			})
+			//宝典必读
+			mui("body").on("tap","#baodianbidu",function(){
+				mui.openWindow({
+					url: "baodianbidu.html",
+					id: "baodianbidu"
+				})
+			})
+			
+			//聊天
+			mui("body").on("tap","#chat",function(){
+				mui.openWindow({
+					url: "chat.html",
+					id: "chat"
+				})
+			})
+			//聊天
+			mui("body").on("tap","#feedback",function(){
+				mui.openWindow({
+					url: "feedback.html",
+					id: "feedback"
+				})
+			})
+			
+			//关于
+			mui("body").on("tap","#about",function(){
+				mui.openWindow({
+					url: "about.html",
+					id: "about"
+				})
+			})
+			
 			//到消息中心
 			document.getElementById("toMsgCenter").addEventListener("tap", function() {
 				mui.openWindow({

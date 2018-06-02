@@ -15,11 +15,6 @@
 		<script src="../js/mui.poppicker.js"></script>
 		<script src="../js/vue.min.js"></script>
 		<script src="../js/app.js"></script>
-		<script type="text/javascript">
-			if(!isLogin()) {
-				location.href = "../login.html";
-			}
-		</script>
 		<style>
 			.guige {
 				margin-left: 5px;
@@ -41,7 +36,7 @@
 				<input type="hidden" id="addressId" :value="data.defaultAddress.id">
 			</template>
 			<template v-if="data.defaultAddress == null">
-				<input type="hidden" id="addressId" >
+				<input type="hidden" id="addressId">
 			</template>
 			<div class="mui-row" style="margin-top: 20px;margin-left: 10px;border-bottom:1px solid gainsboro;height: 40px;">
 				<div class="mui-col-sm-3 mui-col-xs-3">收货地址</div>
@@ -163,6 +158,11 @@
 	</body>
 
 	<script>
+		
+		Vue.filter("realImgPath", function(img) {
+			return baseUpload + img;
+		})
+		
 		var jiesuanDataVue = new Vue({
 			el: '#mui-content',
 			data: {
@@ -214,13 +214,27 @@
 			$.ajax({
 				dataType: "json",
 				type: "post",
+				async:false,
 				url: basePath + "memberAddress/getList",
 				data: {
 					memberId: myLocalStorage.getItem("member").id
 				},
 				success: function(result) {
 					if(result.success) {
-						addressVue.data = result.data;
+						if(result.data.length == 0) {
+							mui.confirm("还没添加过收货地址", "提示", ["去添加", "取消"], function(e) {
+								if(e.index == 0) {
+									mui.openWindow({
+										url: "address_add.html",
+										id: "addressAdd"
+									})
+								}
+							})
+							return
+						}else{
+							addressVue.data = result.data;
+							mui('#sheet1').popover('show');
+						}
 					} else {
 						mui.toast(result.message)
 					}
@@ -232,18 +246,10 @@
 		mui.init();
 		mui.ready(function() {
 			loadJieSuanDta();
-			loadAddress();
+
 			var scroll = mui('.mui-scroll-wrapper').scroll();
 			mui("body").on("tap", "#chooseAddressBtn", function() {
-				/*				mui.confirm("还没添加过收货地址", "提示", ["去添加", "取消"], function(e) {
-									if(e.index == 0) {
-										mui.openWindow({
-											url: "address.html",
-											id: "address"
-										})
-									}
-								})*/
-				mui('#sheet1').popover('show');
+				loadAddress();
 			})
 			//选择快递
 			var picker = new mui.PopPicker();
@@ -260,14 +266,13 @@
 			mui("body").on("tap", "#chooseSendBtn", function() {
 				//picker.show();
 			})
-			
-			
-			mui("body").on("tap","#confirmChoose",function(){
+
+			mui("body").on("tap", "#confirmChoose", function() {
 				var selectRadio = $("#addressVue").find(":radio:checked");
-				if(selectRadio.val() == null){
+				if(selectRadio.val() == null) {
 					mui.toast("请先勾选收货地址");
 					return false;
-				}else{
+				} else {
 					$("#addressId").val(selectRadio.val());
 					var text = selectRadio.parent().next().find(".mui-collapse-2").text();
 					$("#chooseAddressBtn").text(text);
@@ -282,7 +287,11 @@
 						orderData.jiesuanData = myLocalStorage.getItem("jiesuanData");
 						orderData.addressId = $("#addressId").val();
 						orderData.remark = $("#orderRemark").val();
-						myLocalStorage.setItem("orderData",orderData);
+						if(addressId == null && addressId == "") {
+							mui.toast("请选择收货地址!");
+						}
+
+						myLocalStorage.setItem("orderData", orderData);
 						//让用户选择支付方式，然后跳转到后台
 					}
 				})

@@ -1,4 +1,4 @@
-﻿{
+{
     "@platforms": ["android", "iPhone", "iPad"],
     "id": "H546701A7",/*应用的标识，创建应用时自动生成，勿手动修改*/
     "name": "fzsc-new",/*应用名称，程序桌面图标名称*/
@@ -10,7 +10,7 @@
     "icons": {
         "72": "icon.png"
     },
-    "launch_path": "index.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
+    "launch_path": "login.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
     "developer": {
         "name": "",/*开发者名称*/
         "email": "",/*开发者邮箱地址*/
@@ -135,5 +135,169 @@
                 }
             }
         }
-    }
+    },
+	"dependencies": {
+		"pages": {
+			"index.html": {
+				"resources": [],
+				"refer": [
+					"html/userinfo.html",
+					"html/msgCenter.html",
+					"html/cart.html",
+					"html/goods_list.html"
+				],
+				"priority": 0
+			},
+			"login.html": {
+				"resources": [],
+				"refer": [
+					"index.html"
+				],
+				"priority": 0
+			},
+			"html/address.html": {
+				"resources": [],
+				"refer": [
+					"html/address_edit.html",
+					"html/userinfo.html",
+					"html/address_add.html"
+				],
+				"priority": 0
+			},
+			"html/userinfo.html": {
+				"resources": [],
+				"refer": [
+					"html/address.html",
+					"login.html",
+					"html/cart.html",
+					"html/order.html",
+					"html/shuoming.html",
+					"html/chat.html",
+					"html/about.html",
+					"html/feedback.html",
+					"html/setting.html"
+				],
+				"priority": 0
+			},
+			"html/address_edit.html": {
+				"resources": [],
+				"refer": [
+					"html/address.html"
+				],
+				"priority": 0
+			},
+			"html/msgCenter.html": {
+				"resources": [],
+				"refer": [
+					"login.html"
+				],
+				"priority": 0
+			},
+			"html/cart.html": {
+				"resources": [],
+				"refer": [
+					"login.html",
+					"html/jiesuan.html"
+				],
+				"priority": 0
+			},
+			"html/address_add.html": {
+				"resources": [],
+				"refer": [
+					"html/address.html"
+				],
+				"priority": 0
+			},
+			"html/jiesuan.html": {
+				"resources": [],
+				"refer": [
+					"login.html"
+				],
+				"priority": 0
+			}
+		},
+		"idle": {
+			"resources": [
+				"css/feedback.css",
+				"js/mui.picker.min.js",
+				"js/auth.js",
+				"forgetpwd.html",
+				"js/mui.dtpicker.js",
+				"js/scroll.js",
+				"html/baodianbidu.html",
+				"fonts/mui-icons-extra.ttf",
+				"js/mui.zoom.js",
+				"mp3/xiaoxi.mp3",
+				"js/mui.poppicker.js",
+				"images/appshangxian.png",
+				"css/iconfont.css",
+				"js/mui.previewimage.js",
+				"html/goods_detail.html",
+				"fonts/iconfont.ttf",
+				"js/city.data.js",
+				"js/mui.js",
+				"css/mui.picker.min.css",
+				"css/mui.imageviewer.css",
+				"js/mui.view.js",
+				"js/beecloud.js",
+				"js/mui.picker.js",
+				"js/app.js",
+				"images/sys.jpg",
+				"js/mui.pullToRefresh.material.js",
+				"fonts/mui.ttf",
+				"css/mui.listpicker.css",
+				"js/mui.lazyload.js",
+				"css/mui.css",
+				"html/server.html",
+				"js/mui.enterfocus.js",
+				"js/dateUtil.js",
+				"js/city.data-3.js",
+				"js/95516.js",
+				"css/own.css",
+				"images/tblogo.jpg",
+				"css/mui.dtpicker.css",
+				"css/mui.picker.all.css",
+				"js/update.js",
+				"images/addslogo.jpg",
+				"js/feedback.js",
+				"images/guanggao.jpg",
+				"html/contract.html",
+				"js/arttmpl.js",
+				"js/mui.imageViewer.js",
+				"images/shoumingsh.png",
+				"images/baodianbidu.png",
+				"js/vue.min.js",
+				"html/sysMsg.html",
+				"css/icons-extra.css",
+				"js/ad.js",
+				"js/mui.lazyload.img.js",
+				"images/kf.jpg",
+				"doc.docx",
+				"js/mui.min.js",
+				"js/mui.listpicker.js",
+				"js/webviewGroup.js",
+				"css/mui.poppicker.css",
+				"images/kefu.jpg",
+				"js/mui.indexedlist.js",
+				"js/mui.pullToRefresh.js",
+				"js/jquery.min.js",
+				"images/b.jpg",
+				"mind.vsd",
+				"reg.html",
+				"css/style.css",
+				"images/c.jpg",
+				"js/clipboard-polyfill.js",
+				"css/mui.picker.css",
+				"css/mui.indexedlist.css",
+				"js/mui.picker.all.js",
+				"images/tebu.jpg",
+				"css/app.css",
+				"images/a.jpg",
+				"images/1.jpg",
+				"css/mui.min.css",
+				"js/mui.locker.js",
+				"css/pulltorefresh.css"
+			]
+		}
+	}
 }

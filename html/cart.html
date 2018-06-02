@@ -13,11 +13,6 @@
 		<script src="../js/jquery.min.js"></script>
 		<script src="../js/vue.min.js"></script>
 		<script src="../js/app.js"></script>
-		<script type="text/javascript">
-			if(!isLogin()) {
-				location.href = "../login.html";
-			}
-		</script>
 	</head>
 
 	<body>
@@ -109,7 +104,11 @@
 	</body>
 
 	<script>
-
+		Vue.filter("realImgPath", function(img) {
+			return baseUpload + img;
+		})
+		
+		
 		Vue.filter("perPrice", function(goods) {
 			if(myLocalStorage.getItem("member").vip == 0) {
 				return goods.promotionPrice;

@@ -15,11 +15,6 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/app.js"></script>
-		<script type="text/javascript">
-			if(myLocalStorage.getItem("member") == null) {
-				location.href = "../login.html"
-			}
-		</script>
 		<script src="js/mui.pullToRefresh.js"></script>
 		<script src="js/mui.pullToRefresh.material.js"></script>
 		<script src="js/mui.zoom.js"></script>
@@ -265,7 +260,7 @@
 					<a id="offCanvasBtn" href="#offCanvasSide" class="mui-icon mui-action-menu mui-icon-bars mui-pull-left"></a>
 					<h1 class="mui-title"></h1>
 					<div class="mui-title-div mui-pull-right" style="margin-right: 0px;">
-						<a id="toCard" class="mui-icon  mui-icon-extra mui-icon-extra-cart">
+						<a id="toCart" class="mui-icon  mui-icon-extra mui-icon-extra-cart">
 							<template v-if="data.cartNum>0">
 								<span class="mui-badge cartNum" style="top: 5px; margin-left: -18px;">{{data.cartNum}}</span>
 							</template>
@@ -635,6 +630,15 @@
 				initHeader();
 				//加载品牌列表
 				loadBrandAll();
+				
+				mui("body").on("tap","#toCart",function(){
+					mui.openWindow({
+						url:"./html/cart.html",
+						id:"cart"
+						
+					})
+				})
+				
 				//到商品列表页面
 				mui("body").on("tap", ".buy", function() {
 					myLocalStorage.setItem("brandId", $(this).attr("brandid"))
@@ -690,7 +694,7 @@
 				mui("body").on("tap", "#toCard", function() {
 					mui.openWindow({
 						url: "html/cart.html",
-						id: "card"
+						id: "cart"
 					})
 				})
 				//到个人中心
@@ -709,16 +713,16 @@
 				})
 
 				//刷新角标数字
-				window.addEventListener("refreshCartNum", function(event) {
-					refreshCartNum(event.detail.num);
-				})
-				window.addEventListener("refreshChatNum", function(event) {
-					refreshChatNum(event.detail.num);
-				})
+				/*				window.addEventListener("refreshCartNum", function(event) {
+									refreshCartNum(event.detail.num);
+								})
+								window.addEventListener("refreshChatNum", function(event) {
+									refreshChatNum(event.detail.num);
+								})*/
 			})
 
 			//手机app特殊接口
-			mui.plusReady(function() {
+			/*mui.plusReady(function() {
 				//首先获得目标页面的对象
 				var indexWv = null;
 				var userinfoWv = null;
@@ -767,7 +771,7 @@
 					}
 				}, 10000);
 
-			})
+			})*/
 		</script>
 	</body>
 

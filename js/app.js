@@ -1,8 +1,8 @@
-(function(window) {
+(function(window, mui) {
 	/*window.basePath = "http://192.168.1.154:8080/fz-app/";
 	window.baseUpload = "http://192.168.1.154:8080/fz-upload/"; //全局记录服务器端地址*/
-		window.basePath  = "http://192.168.2.100:8080/fz-app/";
-		window.baseUpload = "http://192.168.2.100:8080/fz-upload/";//全局记录服务器端地址
+	window.basePath = "http://192.168.2.100:8080/fz-app/";
+	window.baseUpload = "http://192.168.2.100:8080/fz-upload/"; //全局记录服务器端地址
 
 	//封装localStorage
 	window.myLocalStorage = {};
@@ -124,7 +124,7 @@
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 得到两个数组的交集
 	 * @param arry a
@@ -135,11 +135,17 @@
 			return b.contains(o) ? o : null
 		});
 	};
-	
 
-
-}(window))
-
-Vue.filter("realImgPath", function(img) {
-	return baseUpload + img;
-})
+	mui.app_refresh = function(pageId) {
+		var _page = plus.webview.getWebviewById(pageId);
+		if(_page) {
+			_page.reload(true);
+		}
+	}
+	mui.firePageEvent = function(id, event, jsonParam) {
+		try {
+			var page = plus.webview.getWebviewById(id);
+			mui.fire(page, event, jsonParam);
+		} catch(e) {}
+	}
+}(window, mui))
