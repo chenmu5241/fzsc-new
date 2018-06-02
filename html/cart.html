@@ -51,7 +51,7 @@
 									<div class="mui-row">
 										<div class="mui-col-sm-5 mui-col-xs-5">
 											<p style="margin-left: 5px;  text-decoration: line-through;margin-bottom: 0px;font-size: 12px;">吊牌价{{cart.goods.price}}</p>
-											<p class="geprice" style="margin-left: 5px; margin-bottom: 0px;font-size: 12px;color: black; display: none;" >活动价{{cart.goods.promotionPrice}}</p>
+											<p class="geprice" style="margin-left: 5px; margin-bottom: 0px;font-size: 12px;color: black; display: none;">活动价{{cart.goods.promotionPrice}}</p>
 											<p class="vipprice" style="margin-left: 5px; margin-bottom: 0px;font-size: 12px; color:#F0AD4E; display: none;">会员价{{cart.goods.vipPrice}}</p>
 										</div>
 										<div class="mui-col-sm-7 mui-col-xs-7">
@@ -114,12 +114,12 @@
 			return baseUpload + img;
 		})
 		Vue.filter("perPrice", function(goods) {
-			if(myLocalStorage.getItem("member").vip ==0 ){
+			if(myLocalStorage.getItem("member").vip == 0) {
 				return goods.promotionPrice;
-			}else{
+			} else {
 				return goods.vipPrice;
 			}
-			
+
 		})
 
 		var cartVue = new Vue({
@@ -130,46 +130,50 @@
 			updated: function() {
 				this.$nextTick(function() {
 					mui(".mui-numbox").numbox();
-					if(myLocalStorage.getItem("member").vip ==0 ){
+					if(myLocalStorage.getItem("member").vip == 0) {
 						$(".geprice").show();
 						$(".vipprice").hide();
-					}else{
+					} else {
 						$(".geprice").hide();
 						$(".vipprice").show();
 					}
 				})
 			}
 		});
-		var jiesuanData = {skus:[]};
-		function countAmount(){
-			jiesuanData = {skus:[]};
+		var jiesuanData = {
+			skus: []
+		};
+
+		function countAmount() {
+			jiesuanData = {
+				skus: []
+			};
 			var amount = 0;
-			$("#mui-content").find(":checkbox:checked").each(function(){
+			$("#mui-content").find(":checkbox:checked").each(function() {
 				var sku = {};
 				var skuId = $(this).val();
 				var perprice = $(this).attr("perprice");
 				sku.skuId = skuId;
 				sku.num = $(this).parent().parent().children(":eq(1)").find("input").val();
-				amount += perprice*sku.num;
+				amount += perprice * sku.num;
 				jiesuanData.skus.push(sku);
 			})
 			$("#amount").text(amount);
-			
+
 		}
-		
 
 		mui.init();
 		mui.ready(function() {
 			loadCart();
 
 			mui("body").on("tap", "#toJiesuan", function() {
-				if(jiesuanData.skus.length==0){
+				if(jiesuanData.skus.length == 0) {
 					mui.toast("你还未选择商品!");
 					return
-				}else{
-					myLocalStorage.setItem("jiesuanData",jiesuanData)
+				} else {
+					myLocalStorage.setItem("jiesuanData", jiesuanData)
 				}
-				
+
 				mui.openWindow({
 					url: "./jiesuan.html",
 					id: "jiesuan",
