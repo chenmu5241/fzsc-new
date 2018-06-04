@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>联系客服</title>
+		<link href="../css/mui.css" rel="stylesheet" />
+		<script src="../js/mui.js"></script>
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/dateUtil.js"></script>
+		<script src="../js/app.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<script src="https://g.alicdn.com/aliww/??h5.imsdk/2.1.5/scripts/yw/wsdk.js,h5.openim.kit/0.4.0/scripts/kit.js" charset="utf-8"></script>
+		<script src="../js/openIm.js"></script>
+		<style>
+			.wkit-msg-content {
+				border-top: 0px solid #f7f7f7;
+				position: absolute;
+				left: 0;
+				top: 2rem;
+				width: 100%;
+				bottom: 2rem;
+				overflow: auto;
+				background: #fff;
+				-webkit-overflow-scrolling: touch;
+			}
+			
+			#J_wkitMsgContent {
+				margin-top: 44px;
+			}
+			/*登录成功失败提示屏蔽掉*/
+			
+			#J_WkitToast {
+				display: none;
+			}
+			
+			#J_wkitInputWrap {
+				display: none;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="mui-content">
+		</div>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-arrowthinleft"></a>
+			<h1 class="mui-title">系统消息</h1>
+		</header>
+
+		<audio id="audio" src="../mp3/xiaoxi.mp3" style="display: none;"></audio>
+	</body>
+
+	<script>
+		//获取联系人未读消息数
+		OpenIm.prototype.getUsersUnreadMsgCount = function() {
+			var obj = this;
+
+			//var recentTribe = [];
+			//var unReadTotals = 0; //未读消息总条数
+			sdk.Base.getUnreadMsgCount({
+				count: 10, //一次获取的条数
+				success: function(data) {
+					console.log(data);
+					var list = data.data;
+					list.forEach(function(item) {
+						//前8位是chntribe表示群
+						if(item.contact.substring(0, 8) === 'chntribe') {
+							//recentTribe.push(item);
+						} else {
+							//document.write(item.contact.substring(8) + '在' + getLocalTime(item.timestamp) + ',');
+							//document.write('给我发了' + item.msgCount + '条消息，最后一条消息是在' + getLocalTime(item.lastmsgTime) + '发的<br />');
+							//unReadTotals += item.msgCount;
+							if(touid != item.contact.substring(8)) {
+								$('.n' + item.contact.substring(8)).text(item.msgCount);
+								$('.n' + item.contact.substring(8)).show();
+								console.log(item.contact.substring(8) + '给我发了' + item.msgCount + '条消息');
+							}
+						}
+					});
+					//document.write('未读消息总条数：', unReadTotals);
+				},
+				error: function(error) {
+					//document.write('获取未读消息的条数失败', error);
+				}
+			});
+		}
+
+		mui.init({
+			beforeback: function() {
+				mui.firePageEvent("msgCenter", "setMsgRead");
+			}
+		});
+		mui.ready(function() {
+			var member = myLocalStorage.getItem("member");
+			var config = myLocalStorage.getItem("config");
+			var touser = myLocalStorage.getItem("touser");
+
+			var audio = document.getElementById("audio");
+
+			window.onload = function() {
+				WKIT.init({
+					uid: member.phone,
+					appkey: config.taobaoAppKey,
+					credential: member.phone + "abcd_123",
+					titleBar: false,
+					onLoginSuccess: function() {
+
+					},
+					onLoginError: function() {
+						mui.toast("登录失败，请关闭重新打开！")
+					},
+					onMsgReceived: function() {
+						audio.play();
+						//设置消息已读
+						sdk.Chat.setReadState({
+							touid: myLocalStorage.getItem("touid"),
+							timestamp: Math.floor((+new Date()) / 1000),
+							success: function(data) {
+								console.log('设置已读成功', myLocalStorage.getItem("touid"));
+							},
+							error: function(error) {
+								console.log('设置已读失败', error);
+							}
+						});
+					},
+					container: document.getElementById('mui-content'),
+					touid: touser // 在百川控制台设置的E客服主账号
+					//sendMsgToCustomService: true
+					//groupId:'163428830'
+				});
+			}
+
+		})
+	</script>
+
+</html>

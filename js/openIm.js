@@ -1,49 +1,38 @@
-function getQueryVariable(variable) {
-	var query = window.location.search.substring(1);
-	var vars = query.split("&");
-	for(var i = 0; i < vars.length; i++) {
-		var pair = vars[i].split("=");
-		if(pair[0] == variable) {
-			return pair[1];
-		}
-	}
-	return(false);
-}
-
 var openIm = null;
 
 function OpenIm() {}
 
-var touid = getQueryVariable("touid");
 var sdk = new WSDK();
 
 //登录im帐号
-OpenIm.prototype.imLogin = function() {
+OpenIm.prototype.imLogin = function(callback) {
+	var member = myLocalStorage.getItem("member");
+	var config = myLocalStorage.getItem("config");
 	sdk.Base.login({
-		uid: '15800418543',
-		appkey: '24732366',
-		credential: '15800418543abcd_123',
+		uid: member.phone,
+		appkey: config.taobaoAppKey,
+		credential: member.phone + "abcd_123",
 		timeout: 5000, //登录超时时间
 		success: function(data) {
-			console.log('login success', data);
-			openIm.imGetRecentContact();
+			if(callback){
+				callback();
+			}
 		},
 		error: function(error) {
 			console.log('login fail', error);
-			alert("消息获取失败,请刷新重试");
 		}
 	});
 }
 
 //设置与某人的消息已读
-OpenIm.prototype.setUserReadState = function() {
+OpenIm.prototype.setUserReadState = function(touid) {
 	var obj = this;
-
 	sdk.Chat.setReadState({
 		touid: touid,
+		hasPrefix: true,
 		timestamp: Math.floor((+new Date()) / 1000),
 		success: function(data) {
-			console.log('设置已读成功', data);
+			//console.log('设置已读成功', data);
 		},
 		error: function(error) {
 			console.log('设置已读失败', error);
@@ -63,32 +52,32 @@ OpenIm.prototype.imGetRecentContact = function() {
 			//document.write(JSON.stringify(result));
 			resultMsgs.data = [];
 			var cnts = result.data.cnts;
+			
+			//document.write(JSON.stringify(result));
+			//return false;
 			for(var i = 0; i < cnts.length; i++) {
 				var oneData = {};
 				var cnt = cnts[i];
 				var date = dateUtil.dateToStr(new Date(cnt.time * 1000), "yyyy-MM-dd HH:mm:ss");
-				var uid = cnt.uid;
-				var toUid = cnt.to;
-				if(uid == toUid) {
+				if(cnt.direction == 0) {//0，自己，1，对方
 					continue;
 				}
-				var nickName = uid.substring(8);
 				var msgStr = "";
 				var msgs = cnt.msg;
-				var msgCount = msgs.length;
 				for(var j = 0; j < msgs.length; j++) {
 					var msg = msgs[j];
-					msg[0]
 					if("T" == msg[0]) {
 						msgStr = msg[1];
 						break;
 					}
 				}
-				oneData.nickname = nickName;
+				oneData.nickname = cnt.nickname;
 				oneData.msgStr = msgStr;
 				oneData.msgCount = 0;
 				oneData.date = date;
-				oneData.uid = uid;
+				oneData.uid =cnt.uid;
+				oneData.toUser = cnt.uid.substring(8);
+				oneData.avator = cnt.avator;//头像
 				resultMsgs.data.push(oneData);
 			}
 			openIm.getUsersUnreadMsgCount();
@@ -127,7 +116,6 @@ OpenIm.prototype.getUsersUnreadMsgCount = function() {
 				data: {data:resultMsgs}
 			})*/
 			//document.write(JSON.stringify(resultMsgs))
-			console.log(resultMsgs);
 		},
 		error: function(error) {
 			//document.write('获取未读消息的条数失败', error);

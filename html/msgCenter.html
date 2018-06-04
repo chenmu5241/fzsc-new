@@ -12,7 +12,7 @@
 		<script src="../js/mui.js"></script>
 		<script src="../js/jquery.min.js"></script>
 		<script src="../js/app.js"></script>
-		<script src="https://g.alicdn.com/aliww/h5.openim.sdk/1.0.6/scripts/wsdk.js"></script>
+		<script src="https://g.alicdn.com/aliww/??h5.imsdk/2.1.5/scripts/yw/wsdk.js,h5.openim.kit/0.4.0/scripts/kit.js" charset="utf-8"></script>
 		<script src="../js/dateUtil.js"></script>
 		<script src="../js/vue.min.js"></script>
 		<script src="../js/openIm.js"></script>
@@ -33,10 +33,11 @@
 		<div id="mui-content" class="mui-content" style="margin-bottom: 49px;">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell mui-media" v-for="(msg, index) in data" v-bind:key="msg.uid">
-					<a id="sysMsg" href="sysMsg.html">
+					<a class="toChat" :touser="msg.toUser" :touid="msg.uid">
 						<div style="width:70px" class="mui-pull-left">
 							<template v-if="msg.nickname=='root'">
 								<img class="mui-media-object mui-pull-left" src="../images/sys.jpg">
+								<!--<img class="mui-media-object mui-pull-left" :src="msg.avator">-->
 							</template>
 							<template v-if="msg.nickname!='root'">
 								<img class="mui-media-object mui-pull-left" src="../images/kefu.jpg">
@@ -58,8 +59,6 @@
 	</body>
 
 	<script>
-		
-		console.log(resultMsgs);
 		var headerVue = new Vue({
 			el: "#mui-content",
 			data: resultMsgs
@@ -68,12 +67,41 @@
 		mui.init();
 		mui.ready(function() {
 			openIm = new OpenIm();
-			openIm.imLogin();
-			/*			openIm.imGetRecentContact(function(resultMsgs){
-							console.log(resultMsgs)
-							headerVue.data = resultMsgs;
-						});
-						*/
+			openIm.imLogin(function() {
+				openIm.imGetRecentContact();
+			});
+			/*			window.setInterval(function() {
+							
+						}, 10000);
+			*/
+			mui("body").on("tap", ".toChat", function() {
+				var touid = $(this).attr("touid");
+				var touser = $(this).attr("touser");
+				myLocalStorage.setItem("touser", touser);
+				myLocalStorage.setItem("touid", touid);
+				openIm.setUserReadState(touid);
+				if(touser != "root") {
+					mui.openWindow({
+						url: "./chat.html",
+						id: "chat"
+					})
+				} else {
+					mui.openWindow({
+						url: "sysChat.html",
+						id: "sysChat"
+					})
+				}
+
+			})
+
+			window.addEventListener("imLogin", function() {
+				openIm.imGetRecentContact();
+			})
+
+			window.addEventListener("setMsgRead", function() {
+				myLocalStorage.getItem("touid");
+				openIm.setUserReadState(touid);
+			})
 		})
 	</script>
 
