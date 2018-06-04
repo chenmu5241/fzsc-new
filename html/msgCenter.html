@@ -36,7 +36,10 @@
 					<a id="sysMsg" href="sysMsg.html">
 						<div style="width:70px" class="mui-pull-left">
 							<img class="mui-media-object mui-pull-left" src="../images/sys.jpg">
-							<span class="mui-badge" style="top:-10px;position:relative;margin-left:-25px;color:white;background-color: red;">{{msg.msgCount}}</span>
+							
+							<template v-if="msg.msgCount>0">
+								<span class="mui-badge" style="top:-10px;position:relative;margin-left:-25px;color:white;background-color: red;">{{msg.msgCount}}</span>
+							</template>
 						</div>
 						<div class="mui-media-body">
 							{{msg.nickname}}
