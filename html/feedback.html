@@ -7,13 +7,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<script src="../js/app.js"></script>
-		<script src="../js/login.js"></script>
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<link rel="stylesheet" href="../css/app.css">
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/jquery.min.js"></script>
-
+		<script src="../js/app.js"></script>
 		<style>
 			/*跨webview需要手动指定位置*/
 			
@@ -78,21 +76,46 @@
 				</div>
 			</div>
 			<div class="row mui-input-row">
-				<textarea id='question' class="mui-input-clear question" placeholder="请详细描述你的问题和意见..."></textarea>
+				<textarea id='content' name="content" class="mui-input-clear question" placeholder="请详细描述你的问题和意见..."></textarea>
 			</div>
 			<p>手机/QQ/邮箱</p>
 			<div class="mui-input-row">
-				<input id='contact' type="text" class="mui-input-clear contact" placeholder="(选填,方便我们联系你 )" />
+				<input id='contact' name="contact" type="text" class="mui-input-clear contact" placeholder="(选填,方便我们联系你 )" />
 			</div>
-			<button id='login' class="mui-btn mui-btn-block mui-btn-primary">提交</button>
+			<button id='submit' class="mui-btn mui-btn-block mui-btn-primary" data-loading-text="执行中...">提交</button>
 		</div>
 
 		<script>
 			mui.init();
 			mui.ready(function() {
 				mui("#popover").on("tap", "a", function() {
-					$("#question").val(this.text);
+					$("#content").val(this.text);
 					mui("#popover").popover("hide")
+				})
+				
+			mui("body").on("tap", "#submit", function() {
+					if($("#content").val().trim() == "") {
+						mui.toast("请输入要反馈的内容！");
+						return;
+					}
+					mui("#submit").button("loading");
+					$.ajax({
+						dataType: "json",
+						type: "post",
+						url: basePath + "feedback/add",
+						data: {content:$("#content").val(),contact:$("#contact").val(),memberId:myLocalStorage.getItem("member").id},
+						success: function(result) {
+							if(result.success) {
+								mui.toast("提交成功！")
+							} else {
+								mui.toast(result.message)
+							}
+							mui("#submit").button("reset");
+						},
+						error: function(result) {
+							mui("#submit").button("reset");
+						}
+					});
 				})
 			})
 		</script>

@@ -4,11 +4,11 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<title>服装商城</title>
-		<script src="../js/app.js"></script>
+		<title>联系客服</title>
+		<link href="../css/mui.css" rel="stylesheet" />
 		<script src="../js/mui.js"></script>
 		<script src="../js/jquery.min.js"></script>
-		<link href="../css/mui.css" rel="stylesheet" />
+		<script src="../js/app.js"></script>
 		<link rel="stylesheet" type="text/css" href="../css/app.css" />
 		<script src="https://g.alicdn.com/aliww/??h5.imsdk/2.1.0/scripts/yw/wsdk.js,h5.openim.kit/0.3.7/scripts/kit.js" charset="utf-8"></script>
 		<style>
@@ -48,15 +48,51 @@
 	</body>
 
 	<script>
+		//获取联系人未读消息数
+		OpenIm.prototype.getUsersUnreadMsgCount = function() {
+			var obj = this;
+
+			//var recentTribe = [];
+			//var unReadTotals = 0; //未读消息总条数
+			sdk.Base.getUnreadMsgCount({
+				count: 10, //一次获取的条数
+				success: function(data) {
+					console.log(data);
+					var list = data.data;
+					list.forEach(function(item) {
+						//前8位是chntribe表示群
+						if(item.contact.substring(0, 8) === 'chntribe') {
+							//recentTribe.push(item);
+						} else {
+							//document.write(item.contact.substring(8) + '在' + getLocalTime(item.timestamp) + ',');
+							//document.write('给我发了' + item.msgCount + '条消息，最后一条消息是在' + getLocalTime(item.lastmsgTime) + '发的<br />');
+							//unReadTotals += item.msgCount;
+							if(touid != item.contact.substring(8)) {
+								$('.n' + item.contact.substring(8)).text(item.msgCount);
+								$('.n' + item.contact.substring(8)).show();
+								console.log(item.contact.substring(8) + '给我发了' + item.msgCount + '条消息');
+							}
+						}
+					});
+					//document.write('未读消息总条数：', unReadTotals);
+				},
+				error: function(error) {
+					//document.write('获取未读消息的条数失败', error);
+				}
+			});
+		}
+
 		mui.init();
 		mui.ready(function() {
+			var member = myLocalStorage.getItem("member");
+			var config = myLocalStorage.getItem("config");
+			console.log(member)
 			var audio = document.getElementById("audio");
-
 			window.onload = function() {
 				WKIT.init({
-					uid: 'root',
-					appkey: 24732366,
-					credential: 'xxxxxx',
+					uid: member.phone,
+					appkey: config.taobaoAppKey,
+					credential: member.phone + "abcd_123",
 					titleBar: false,
 					onLoginSuccess: function() {
 						mui.toast("登录成功，可以发送消息了!")
@@ -70,7 +106,7 @@
 					container: document.getElementById('mui-content'),
 					//autoMsg: '【特步童装】针织上衣6879496494646',
 					//autoMsgType:1,
-					touid: '熊园昆', // 在百川控制台设置的E客服主账号
+					touid: config.taobaoEkefu, // 在百川控制台设置的E客服主账号
 					sendMsgToCustomService: true
 					//groupId:'163428830'
 				});

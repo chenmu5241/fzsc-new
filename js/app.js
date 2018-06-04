@@ -1,8 +1,8 @@
 (function(window, mui) {
-	/*window.basePath = "http://192.168.1.154:8080/fz-app/";
-	window.baseUpload = "http://192.168.1.154:8080/fz-upload/"; //全局记录服务器端地址*/
-	window.basePath = "http://192.168.2.100:8080/fz-app/";
-	window.baseUpload = "http://192.168.2.100:8080/fz-upload/"; //全局记录服务器端地址
+	window.basePath = "http://192.168.1.154:8080/fz-app/";
+	window.baseUpload = "http://192.168.1.154:8080/fz-upload/"; //全局记录服务器端地址
+	/*window.basePath = "http://192.168.2.100:8080/fz-app/";
+	window.baseUpload = "http://192.168.2.100:8080/fz-upload/"; //*/
 
 	//封装localStorage
 	window.myLocalStorage = {};
@@ -148,4 +148,23 @@
 			mui.fire(page, event, jsonParam);
 		} catch(e) {}
 	}
+
+	//加载config数据
+	if(myLocalStorage.getItem("config") == null) {
+		$.ajax({
+			dataType: "json",
+			type: "post",
+			url: basePath + "loadConfig",
+			success: function(result) {
+				if(result.success) {
+					console.log(result.data);
+					myLocalStorage.setItem("config", result.data);
+				} else {
+					mui.toast(result.message)
+				}
+			},
+			error: function(result) {}
+		});
+	}
+
 }(window, mui))

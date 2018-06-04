@@ -12,6 +12,7 @@
 		<script src="../js/mui.min.js "></script>
 		<script src="../js/jquery.min.js"></script>
 		<script src="../js/app.js"></script>
+		<script src="../js/vue.min.js"></script>
 		<style>
 			html,
 			body {
@@ -53,24 +54,32 @@
 	</head>
 
 	<body>
-		<header id="header" class="mui-bar mui-bar-nav">
+		<header class="mui-bar mui-bar-nav" id="headerVue" v-cloak>
 			<a class="mui-action-back mui-icon mui-icon-arrowthinleft"></a>
 			<h1 class="mui-title">个人中心</h1>
-			<div class="mui-title-div mui-pull-right">
-				<a id="toCartBtn" class="mui-icon  mui-icon-extra mui-icon-extra-cart"><span class="mui-badge cartNum" style="top:5px;    margin-left:-18px;">1</span></a>
-				<a id="toMsgCenter" style="margin-left: 3px;" class="mui-icon mui-icon-chatboxes"><span class="mui-badge chatNum" style="top:5px; margin-left:-18px;">1</span></a>
+			<div class="mui-title-div mui-pull-right" style="margin-right: 0px;">
+				<a id="toCart" class="mui-icon  mui-icon-extra mui-icon-extra-cart">
+					<template v-if="data.cartNum>0">
+						<span class="mui-badge cartNum" style="top: 5px; margin-left: -18px;">{{data.cartNum}}</span>
+					</template>
+				</a>
+				<a id="toMsgCenter" style="margin-left: 3px;" class="mui-icon mui-icon-chatboxes ">
+					<template v-if="data.msgNum>0">
+						<span class="mui-badge chatNum" style="top: 5px; margin-left: -18px;">{{data.msgNum }}</span>
+					</template>
+				</a>
 			</div>
 		</header>
 		<!--页面标题栏结束-->
 		<!--页面主内容区开始-->
-		<div class="mui-content">
+		<div class="mui-content" id="mui-content" v-cloak>
 			<ul class="mui-table-view mui-table-view-chevron">
 				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right" id="setting">
-						<img class="mui-media-object mui-pull-left head-img" id="head-img" src="../images/kf.jpg">
+					<a class="mui-navigate-right">
+						<!--<img class="mui-media-object mui-pull-left head-img" id="head-img" src="../images/kf.jpg">-->
 						<div class="mui-media-body">
-							熊园昆
-							<p class='mui-ellipsis'>15800418543</p>
+							{{data.nickname}}
+							<p class='mui-ellipsis'>{{data.phone}}</p>
 						</div>
 					</a>
 				</li>
@@ -113,30 +122,33 @@
 				</li>
 			</ul>-->
 			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a onclick="mui.toast('功能暂未开放')" class="mui-navigate-right">升级vip</a>
+				</li>
+				<li class="mui-table-view-cell ">
+					<a id="setting" class="mui-navigate-right">设置</a>
+				</li>
 				<li class="mui-table-view-cell ">
 					<a>账户余额：<span style="color: red;">¥ 22.00</span></a>
 					<a class="mui-btn mui-btn-primary">充值</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a onclick="mui.toast('功能暂未开放')" class="mui-navigate-right">升级vip</a>
+					<a id="address" class="mui-navigate-right">收货地址管理</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a  id="address" class="mui-navigate-right">收货地址管理</a>
+					<a id="shuoming" class="mui-navigate-right">上线说明</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a  id="shuoming" class="mui-navigate-right">上线说明</a>
+					<a id="baodianbidu" class="mui-navigate-right">宝典必读</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a  id="baodianbidu" class="mui-navigate-right">宝典必读</a>
+					<a id="chat" class="mui-navigate-right">联系客服</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a  id="chat" class="mui-navigate-right">联系客服</a>
+					<a id="feedback" class="mui-navigate-right">意见反馈</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a  id="feedback" class="mui-navigate-right">意见反馈</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a  id="about" class="mui-navigate-right">关于</a>
+					<a id="about" class="mui-navigate-right">关于</a>
 				</li>
 			</ul>
 
@@ -147,9 +159,50 @@
 
 	</body>
 	<script type="text/javascript" charset="utf-8">
+		var headerVue = new Vue({
+			el: "#headerVue",
+			data: {
+				data: {
+					cartNum: 0,
+					msgNum: 0
+				}
+			}
+		})
+
+		var myVue = new Vue({
+			el: '#mui-content',
+			data: {
+				data: myLocalStorage.getItem("member")
+			},
+			updated: function() {
+				this.$nextTick(function() {})
+			}
+		});
+
+		function initHeader() {
+			$.ajax({
+				dataType: "json",
+				type: "post",
+				url: basePath + "loadHeaderNum",
+				data: {
+					memberId: myLocalStorage.getItem("member").id
+				},
+				success: function(result) {
+					if(result.success) {
+						headerVue.data = result.data;
+					} else {
+						mui.toast(result.message)
+					}
+				},
+				error: function(result) {}
+			});
+		}
+
 		mui.init();
 		mui.ready(function() {
-			mui("body").on("tap", "#toCartBtn", function() {
+			initHeader()
+			//按钮事件
+			mui("body").on("tap", "#toCart", function() {
 				mui.openWindow({
 					url: "cart.html",
 					id: "card"
@@ -162,50 +215,50 @@
 				})
 			})
 			//都地址管理
-			mui("body").on("tap","#address",function(){
+			mui("body").on("tap", "#address", function() {
 				mui.openWindow({
 					url: "address.html",
 					id: "address"
 				})
 			})
 			//说明
-			mui("body").on("tap","#shuoming",function(){
+			mui("body").on("tap", "#shuoming", function() {
 				mui.openWindow({
 					url: "shuoming.html",
 					id: "shuoming"
 				})
 			})
 			//宝典必读
-			mui("body").on("tap","#baodianbidu",function(){
+			mui("body").on("tap", "#baodianbidu", function() {
 				mui.openWindow({
 					url: "baodianbidu.html",
 					id: "baodianbidu"
 				})
 			})
-			
+
 			//聊天
-			mui("body").on("tap","#chat",function(){
+			mui("body").on("tap", "#chat", function() {
 				mui.openWindow({
 					url: "chat.html",
 					id: "chat"
 				})
 			})
 			//聊天
-			mui("body").on("tap","#feedback",function(){
+			mui("body").on("tap", "#feedback", function() {
 				mui.openWindow({
 					url: "feedback.html",
 					id: "feedback"
 				})
 			})
-			
+
 			//关于
-			mui("body").on("tap","#about",function(){
+			mui("body").on("tap", "#about", function() {
 				mui.openWindow({
 					url: "about.html",
 					id: "about"
 				})
 			})
-			
+
 			//到消息中心
 			document.getElementById("toMsgCenter").addEventListener("tap", function() {
 				mui.openWindow({
@@ -216,7 +269,7 @@
 			//退出登录
 			document.getElementById("logoutBtn").addEventListener("tap", function() {
 				myLocalStorage.removeItem("user");
-				location.href = "./login.html";
+				location.href = "../login.html";
 			})
 			//到订单中心
 			$("#sliderSegmentedControl").children().each(function() {

@@ -4,14 +4,18 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<title>服装商城</title>
-		<script src="../js/app.js"></script>
+		<title>消息中心</title>
 		<link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
 		<link rel="stylesheet" type="text/css" href="../css/icons-extra.css" />
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<link rel="stylesheet" type="text/css" href="../css/app.css" />
 		<script src="../js/mui.js"></script>
 		<script src="../js/jquery.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="https://g.alicdn.com/aliww/h5.openim.sdk/1.0.6/scripts/wsdk.js"></script>
+		<script src="../js/dateUtil.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<script src="../js/openIm.js"></script>
 		<style>
 			.mui-table-view .mui-media-object {
 				line-height: 60px;
@@ -26,33 +30,19 @@
 			<a class="mui-action-back mui-icon mui-icon-arrowthinleft"></a>
 			<h1 class="mui-title">消息中心</h1>
 		</header>
-
 		<div id="mui-content" class="mui-content" style="margin-bottom: 49px;">
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell mui-media">
+				<li class="mui-table-view-cell mui-media" v-for="(msg, index) in data" v-bind:key="msg.uid">
 					<a id="sysMsg" href="sysMsg.html">
 						<div style="width:70px" class="mui-pull-left">
 							<img class="mui-media-object mui-pull-left" src="../images/sys.jpg">
-							<span class="mui-badge" style="top:-10px;position:relative;margin-left:-25px;color:white;background-color: red;">1</span>
+							<span class="mui-badge" style="top:-10px;position:relative;margin-left:-25px;color:white;background-color: red;">{{msg.msgCount}}</span>
 						</div>
 						<div class="mui-media-body">
-							系统消息
-							<p class="mui-pull-right">2018-05-23 10:00</p>
-							<p class='mui-ellipsis-2'>您的订单已发货，预计5天左右到达!您的订单已发货，预计5天左右到达!s您的订单已发货，预计5天左右到达!s您的订单已发货，预计5天左右到达!s
+							{{msg.nickname}}
+							<p class="mui-pull-right">{{msg.date}}</p>
+							<p class='mui-ellipsis-2'>{{msg.msgStr}}
 							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a id="chatMsg" href="chat.html">
-						<div style="width:70px" class="mui-pull-left">
-							<img class="mui-media-object mui-pull-left" src="../images/kefu.jpg">
-							<span class="mui-badge" style="top:-10px;position:relative;margin-left:-25px;color:white;background-color: red;">1</span>
-						</div>
-						<div class="mui-media-body">
-							客服消息
-							<p class="mui-pull-right">2018-05-23 10:00</p>
-							<p class='mui-ellipsis-2'>您反映的问题，我们会尽快处理!您反映的问题，我们会尽快处理!您反映的问题，我们会尽快处理!您反映的问题，我们会尽快处理!您反映的问题，我们会尽快处理!</p>
 						</div>
 					</a>
 				</li>
@@ -61,22 +51,22 @@
 	</body>
 
 	<script>
+		
+		console.log(resultMsgs);
+		var headerVue = new Vue({
+			el: "#mui-content",
+			data: resultMsgs
+		})
+
 		mui.init();
 		mui.ready(function() {
-/*			//系统消息
-			document.getElementById("sysMsg").addEventListener("tap", function() {
-				mui.openWindow({
-					url: "sysMsg.html",
-					id: "msgList"
-				})
-			})
-			//客户聊天
-			document.getElementById("chatMsg").addEventListener("tap", function() {
-				mui.openWindow({
-					url: "chat.html",
-					id: "chat"
-				})
-			})*/
+			openIm = new OpenIm();
+			openIm.imLogin();
+			/*			openIm.imGetRecentContact(function(resultMsgs){
+							console.log(resultMsgs)
+							headerVue.data = resultMsgs;
+						});
+						*/
 		})
 	</script>
 
