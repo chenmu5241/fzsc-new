@@ -36,11 +36,12 @@
 					<a class="toChat" :touser="msg.toUser" :touid="msg.uid">
 						<div style="width:70px" class="mui-pull-left">
 							<template v-if="msg.nickname=='root'">
-								<img class="mui-media-object mui-pull-left" src="../images/sys.jpg">
-								<!--<img class="mui-media-object mui-pull-left" :src="msg.avator">-->
+								<!--<img class="mui-media-object mui-pull-left" src="../images/sys.jpg">-->
+								<img class="mui-media-object mui-pull-left" :src="msg.avator">
 							</template>
 							<template v-if="msg.nickname!='root'">
-								<img class="mui-media-object mui-pull-left" src="../images/kefu.jpg">
+								<!--<img class="mui-media-object mui-pull-left" src="../images/kefu.jpg">-->
+								<img class="mui-media-object mui-pull-left" :src="msg.avator">
 							</template>
 							<template v-if="msg.msgCount>0">
 								<span class="mui-badge" style="top:-10px;position:relative;margin-left:-25px;color:white;background-color: red;">{{msg.msgCount}}</span>
@@ -70,10 +71,11 @@
 			openIm.imLogin(function() {
 				openIm.imGetRecentContact();
 			});
-			/*			window.setInterval(function() {
-							
-						}, 10000);
-			*/
+
+			window.setInterval(function() {
+				openIm.imGetRecentContact();
+			}, 10000);
+			
 			mui("body").on("tap", ".toChat", function() {
 				var touid = $(this).attr("touid");
 				var touser = $(this).attr("touser");

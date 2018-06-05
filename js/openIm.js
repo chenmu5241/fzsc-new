@@ -32,7 +32,7 @@ OpenIm.prototype.setUserReadState = function(touid) {
 		hasPrefix: true,
 		timestamp: Math.floor((+new Date()) / 1000),
 		success: function(data) {
-			//console.log('设置已读成功', data);
+			console.log('设置已读成功', data);
 		},
 		error: function(error) {
 			console.log('设置已读失败', error);
@@ -58,8 +58,9 @@ OpenIm.prototype.imGetRecentContact = function() {
 			for(var i = 0; i < cnts.length; i++) {
 				var oneData = {};
 				var cnt = cnts[i];
+				var nickname = cnt.uid.substring(8);
 				var date = dateUtil.dateToStr(new Date(cnt.time * 1000), "yyyy-MM-dd HH:mm:ss");
-				if(cnt.direction == 0) {//0，自己，1，对方
+				if(nickname.indexOf("服务助手")>0) {//过滤服务助手消息
 					continue;
 				}
 				var msgStr = "";
@@ -71,7 +72,7 @@ OpenIm.prototype.imGetRecentContact = function() {
 						break;
 					}
 				}
-				oneData.nickname = cnt.nickname;
+				oneData.nickname = nickname
 				oneData.msgStr = msgStr;
 				oneData.msgCount = 0;
 				oneData.date = date;
@@ -110,12 +111,6 @@ OpenIm.prototype.getUsersUnreadMsgCount = function() {
 					}
 				}
 			});
-			
-/*			new Vue({
-				el: "#mui-content",
-				data: {data:resultMsgs}
-			})*/
-			//document.write(JSON.stringify(resultMsgs))
 		},
 		error: function(error) {
 			//document.write('获取未读消息的条数失败', error);

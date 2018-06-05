@@ -22,8 +22,8 @@
 		<script src="../js/mui.previewimage.js"></script>
 		<script src="../js/clipboard-polyfill.js"></script>
 		<script src="../js/vue.min.js"></script>
-		<script src="https://g.alicdn.com/aliww/??h5.imsdk/2.1.5/scripts/yw/wsdk.js,h5.openim.kit/0.4.0/scripts/kit.js" charset="utf-8"></script>
-		<script src="../js/openIm.js"></script>
+<!--		<script src="https://g.alicdn.com/aliww/??h5.imsdk/2.1.5/scripts/yw/wsdk.js,h5.openim.kit/0.4.0/scripts/kit.js" charset="utf-8"></script>
+		<script src="../js/openIm.js"></script>-->
 		<style>
 			.mui-off-canvas-left,
 			.mui-off-canvas-right {
@@ -350,7 +350,7 @@
 				</nav>
 			</aside>
 		</div>
-		
+
 		<script type="text/javascript" charset="utf-8">
 			//加载数据方法
 			var pageVo1 = {
@@ -516,13 +516,18 @@
 				pullToRefresh.pullDownLoading();
 
 			}
+			
+			
+			
+			
 
 			/********mui初始化之后的事件绑定*************************/
 			var pullToRefresh = null;
 			mui.init();
 			mui.ready(function() {
+/*				var config = myLocalStorage.getItem("config");
 				openIm = new OpenIm();
-				openIm.imLogin();
+				openIm.imLogin();*/
 
 				initHeader();
 				initSider();
@@ -646,42 +651,29 @@
 				$("body").on("tap", ".chat", function() {
 					var goods = $(this).attr("goods");
 					var goodsImg = $(this).attr("imgurl");
+					//openIm.setUserReadState(config.taobaoEkefu);
+					myLocalStorage.setItem("goodsMsg",goods)
+					myLocalStorage.setItem("goodsMsgImg","http://interface.im.taobao.com/mobileimweb/fileupload/downloadPriFile.do?type=1&fileId=2706a67daaad6305ab59976270d668e8.png&suffix=png&width=600&height=600&mediaSize=13301&fromId=i462236b15800418543")
+					mui.openWindow({
+						url: "chat.html",
+						id: "chat"
+					})
 					
-					
-					
-					/*	var image = new Image();
-						image.crossOrigin = '*';
-						image.crossDomain=true;
-						image.src = goodsImg;
-						image.onload = function(){
-						  var base64 = getBase64Image(image);
-						  console.log(base64);
-						}*/
-
-					/*var image = new Image();
-					image.crossOrigin = "";
-					image.src = goodsImg;
-					image.onload = function() {
-						var base64Img = getBase64Image(image);
-						var ext = 'png'; // png || jpg...
-						sdk.Plugin.Image.upload({
-							base64Img: base64Img,
-							ext: ext,
-							timeout: 20000,
-							success: function(result) {
-								document.write(result.data.url)
-
-								return false;
-								mui.openWindow({
-									url: "chat.html",
-									id: "chat"
-								})
-							},
-							error: function(error) {
-								console.log(error);
-							}
-						});
-					}*/
+					//给客服发送商品图片
+/*					sdk.Chat.sendMsgToCustomService({
+				       touid: config.taobaoEkefu,
+				       msg: goods+'<img src="http://interface.im.taobao.com/mobileimweb/fileupload/downloadPriFile.do?type=1&fileId=2706a67daaad6305ab59976270d668e8.png&suffix=png&width=600&height=600&mediaSize=13301&fromId=i462236b15800418543">',
+				       success: function(data){
+				       		mui.openWindow({
+								url: "chat.html",
+								id: "chat"
+							})
+				       },
+				       error: function(error){
+				       		console.log(error)
+				       		openIm.imLogin();
+				       }
+				    });*/
 
 				})
 				//加购物车
