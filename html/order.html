@@ -15,6 +15,8 @@
 		<script src="../js/mui.pullToRefresh.js"></script>
 		<script src="../js/mui.pullToRefresh.material.js"></script>
 		<script src="../js/app.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<script src="../js/dateUtil.js"></script>
 		<style>
 			.mui-control-content {
 				background-color: white;
@@ -47,9 +49,9 @@
 					<a class="mui-control-item" href="#item4mobile">
 						已发货
 					</a>
-					<a class="mui-control-item" href="#item5mobile">
+<!--					<a class="mui-control-item" href="#item5mobile">
 						待评价
-					</a>
+					</a>-->
 					<a class="mui-control-item" href="#item6mobile">
 						退货退款
 					</a>
@@ -58,110 +60,56 @@
 					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
 						<div class="mui-scroll-wrapper">
 							<div class="mui-scroll" id="refresh_container">
-								<div class="mui-row" style="">
+								<div class="mui-row" style=""  id="vue1">
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row" style="padding: 10px 15px 10px 15px;">
-											<p style="font-size: 12px;color: black;">订单编号：413123164646 </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
+										
+										
+										<div class="mui-row" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} 
+												<span class="mui-pull-right" style="color:red">{{order.orderStatus | orderStatusStr}}</span>
+											</p>
+											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/b.jpg">
+															<img width="100%" height="100" class="mui-media-object" :src="orderDetail.goodsImage | realImgPath">
 														</div>
 														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
+															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【{{orderDetail.brandName}}】{{orderDetail.goodsName}}</p>
+															<p v-for="(attr,index) in orderDetail.orderDetailAttrValues" style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">{{attr.attr}}:{{attr.attrValue}}</p>
 														</div>
 														<div class="mui-col-sm-4 mui-col-xs-4">
 															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
+																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">成交价:¥{{orderDetail.payPrice}}</p>
+																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2{{orderDetail.goodsNumber}}</p>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
-												<div class="mui-col-sm-12 mui-col-xs-12">
-													<div class="mui-row">
-														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/a.jpg">
-														</div>
-														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
-														</div>
-														<div class="mui-col-sm-4 mui-col-xs-4">
-															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
+											
 											<div class="mui-row">
-												<p style="font-size: 12px;color: black;float:right">共1件商品 合计：¥69(含运费¥25)</p>
+												<p style="font-size: 12px;color: black;float:right">共{{order.orderDetails.length}}件商品 合计：¥{{order.orderAmount}}(含运费¥{{order.freight}})</p>
 											</div>
 											<div class="mui-row mui-pull-right">
-												<a class="mui-btn">查看物流</a>
-												<!--<a class="mui-btn " style="margin-left: 5px;">延长收货</a>-->
-												<a class="mui-btn mui-btn-primary">确认收货</a>
+												<template v-if="order.orderStatus == 1">
+													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
+												</template>
+												<template v-if="order.orderStatus == 3">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
+												</template>
+												<template v-if="order.orderStatus == 4">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+												</template>
+												<template v-if="order.orderStatus == 6">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+												</template>
 											</div>
 										</div>
-										<div class="mui-row" style="padding: 10px 15px 10px 15px;">
-											<p style="font-size: 12px;color: black;">订单编号：413123164646 </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
-												<div class="mui-col-sm-12 mui-col-xs-12">
-													<div class="mui-row">
-														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/b.jpg">
-														</div>
-														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
-														</div>
-														<div class="mui-col-sm-4 mui-col-xs-4">
-															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
-												<div class="mui-col-sm-12 mui-col-xs-12">
-													<div class="mui-row">
-														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/a.jpg">
-														</div>
-														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
-														</div>
-														<div class="mui-col-sm-4 mui-col-xs-4">
-															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="mui-row">
-												<p style="font-size: 12px;color: black;float:right">共1件商品 合计：¥69(含运费¥25)</p>
-											</div>
-											<div class="mui-row mui-pull-right">
-												<a class="mui-btn">查看物流</a>
-												<!--<a class="mui-btn " style="margin-left: 5px;">延长收货</a>-->
-												<a class="mui-btn mui-btn-primary" style="margin-left: 5px;">确认收货</a>
-											</div>
-										</div>
+										
+										
 									</div>
 								</div>
 							</div>
@@ -170,57 +118,48 @@
 					<div id="item2mobile" class="mui-slider-item mui-control-content">
 						<div id="scroll2" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
-								<div class="mui-row" style="">
+								<div class="mui-row" style=""  id="vue2">
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row" style="padding: 10px 15px 10px 15px;">
-											<p style="font-size: 12px;color: black;">订单编号：413123164646 </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
+										<div class="mui-row" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} </p>
+											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/b.jpg">
+															<img width="100%" height="100" class="mui-media-object" :src="orderDetail.goodsImage | realImgPath">
 														</div>
 														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
+															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【{{orderDetail.brandName}}】{{orderDetail.goodsName}}</p>
+															<p v-for="(attr,index) in orderDetail.orderDetailAttrValues" style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">{{attr.attr}}:{{attr.attrValue}}</p>
 														</div>
 														<div class="mui-col-sm-4 mui-col-xs-4">
 															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
+																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">成交价:¥{{orderDetail.payPrice}}</p>
+																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2{{orderDetail.goodsNumber}}</p>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
-												<div class="mui-col-sm-12 mui-col-xs-12">
-													<div class="mui-row">
-														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/a.jpg">
-														</div>
-														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
-														</div>
-														<div class="mui-col-sm-4 mui-col-xs-4">
-															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
+											
 											<div class="mui-row">
-												<p style="font-size: 12px;color: black;float:right">共1件商品 合计：¥69(含运费¥25)</p>
+												<p style="font-size: 12px;color: black;float:right">共{{order.orderDetails.length}}件商品 合计：¥{{order.orderAmount}}(含运费¥{{order.freight}})</p>
 											</div>
 											<div class="mui-row mui-pull-right">
-												<a class="mui-btn">查看物流</a>
-												<!--<a class="mui-btn " style="margin-left: 5px;">延长收货</a>-->
-												<a class="mui-btn mui-btn-primary" style="margin-left: 5px;">确认收货</a>
+												<template v-if="order.orderStatus == 1">
+													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
+												</template>
+												<template v-if="order.orderStatus == 3">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
+												</template>
+												<template v-if="order.orderStatus == 4">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+												</template>
+												<template v-if="order.orderStatus == 6">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+												</template>
 											</div>
 										</div>
 									</div>
@@ -229,59 +168,50 @@
 						</div>
 					</div>
 					<div id="item3mobile" class="mui-slider-item mui-control-content">
-						<div id="scroll2" class="mui-scroll-wrapper">
+						<div  class="mui-scroll-wrapper">
 							<div class="mui-scroll">
-								<div class="mui-row" style="">
+								<div class="mui-row" style="" id="vue3">
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row" style="padding: 10px 15px 10px 15px;">
-											<p style="font-size: 12px;color: black;">订单编号：413123164646 </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
+										<div class="mui-row" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} </p>
+											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/b.jpg">
+															<img width="100%" height="100" class="mui-media-object" :src="orderDetail.goodsImage | realImgPath">
 														</div>
 														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
+															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【{{orderDetail.brandName}}】{{orderDetail.goodsName}}</p>
+															<p v-for="(attr,index) in orderDetail.orderDetailAttrValues" style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">{{attr.attr}}:{{attr.attrValue}}</p>
 														</div>
 														<div class="mui-col-sm-4 mui-col-xs-4">
 															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
+																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">成交价:¥{{orderDetail.payPrice}}</p>
+																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2{{orderDetail.goodsNumber}}</p>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
-												<div class="mui-col-sm-12 mui-col-xs-12">
-													<div class="mui-row">
-														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/a.jpg">
-														</div>
-														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
-														</div>
-														<div class="mui-col-sm-4 mui-col-xs-4">
-															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
+											
 											<div class="mui-row">
-												<p style="font-size: 12px;color: black;float:right">共1件商品 合计：¥69(含运费¥25)</p>
+												<p style="font-size: 12px;color: black;float:right">共{{order.orderDetails.length}}件商品 合计：¥{{order.orderAmount}}(含运费¥{{order.freight}})</p>
 											</div>
 											<div class="mui-row mui-pull-right">
-												<a class="mui-btn">查看物流</a>
-												<!--<a class="mui-btn " style="margin-left: 5px;">延长收货</a>-->
-												<a class="mui-btn mui-btn-primary" style="margin-left: 5px;">确认收货</a>
+												<template v-if="order.orderStatus == 1">
+													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
+												</template>
+												<template v-if="order.orderStatus == 3">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
+												</template>
+												<template v-if="order.orderStatus == 4">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+												</template>
+												<template v-if="order.orderStatus == 6">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+												</template>
 											</div>
 										</div>
 									</div>
@@ -290,120 +220,50 @@
 						</div>
 					</div>
 					<div id="item4mobile" class="mui-slider-item mui-control-content">
-						<div id="scroll2" class="mui-scroll-wrapper">
+						<div  class="mui-scroll-wrapper">
 							<div class="mui-scroll">
-								<div class="mui-row" style="">
+								<div class="mui-row" style="" id="vue4">
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row" style="padding: 10px 15px 10px 15px;">
-											<p style="font-size: 12px;color: black;">订单编号：413123164646 </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
+										<div class="mui-row" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} </p>
+											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/b.jpg">
+															<img width="100%" height="100" class="mui-media-object" :src="orderDetail.goodsImage | realImgPath">
 														</div>
 														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
+															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【{{orderDetail.brandName}}】{{orderDetail.goodsName}}</p>
+															<p v-for="(attr,index) in orderDetail.orderDetailAttrValues" style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">{{attr.attr}}:{{attr.attrValue}}</p>
 														</div>
 														<div class="mui-col-sm-4 mui-col-xs-4">
 															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
+																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">成交价:¥{{orderDetail.payPrice}}</p>
+																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2{{orderDetail.goodsNumber}}</p>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
-												<div class="mui-col-sm-12 mui-col-xs-12">
-													<div class="mui-row">
-														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/a.jpg">
-														</div>
-														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
-														</div>
-														<div class="mui-col-sm-4 mui-col-xs-4">
-															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
+											
 											<div class="mui-row">
-												<p style="font-size: 12px;color: black;float:right">共1件商品 合计：¥69(含运费¥25)</p>
+												<p style="font-size: 12px;color: black;float:right">共{{order.orderDetails.length}}件商品 合计：¥{{order.orderAmount}}(含运费¥{{order.freight}})</p>
 											</div>
 											<div class="mui-row mui-pull-right">
-												<a class="mui-btn">查看物流</a>
-												<!--<a class="mui-btn " style="margin-left: 5px;">延长收货</a>-->
-												<a class="mui-btn mui-btn-primary" style="margin-left: 5px;">确认收货</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="item5mobile" class="mui-slider-item mui-control-content">
-						<div id="scroll2" class="mui-scroll-wrapper">
-							<div class="mui-scroll">
-								<div class="mui-row" style="">
-									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row" style="padding: 10px 15px 10px 15px;">
-											<p style="font-size: 12px;color: black;">订单编号：413123164646 </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
-												<div class="mui-col-sm-12 mui-col-xs-12">
-													<div class="mui-row">
-														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/b.jpg">
-														</div>
-														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
-														</div>
-														<div class="mui-col-sm-4 mui-col-xs-4">
-															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
-												<div class="mui-col-sm-12 mui-col-xs-12">
-													<div class="mui-row">
-														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/a.jpg">
-														</div>
-														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
-														</div>
-														<div class="mui-col-sm-4 mui-col-xs-4">
-															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="mui-row">
-												<p style="font-size: 12px;color: black;float:right">共1件商品 合计：¥69(含运费¥25)</p>
-											</div>
-											<div class="mui-row mui-pull-right">
-												<a class="mui-btn">查看物流</a>
-												<!--<a class="mui-btn " style="margin-left: 5px;">延长收货</a>-->
-												<a class="mui-btn mui-btn-primary" style="margin-left: 5px;">确认收货</a>
+												<template v-if="order.orderStatus == 1">
+													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
+												</template>
+												<template v-if="order.orderStatus == 3">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
+												</template>
+												<template v-if="order.orderStatus == 4">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+												</template>
+												<template v-if="order.orderStatus == 6">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+												</template>
 											</div>
 										</div>
 									</div>
@@ -412,59 +272,50 @@
 						</div>
 					</div>
 					<div id="item6mobile" class="mui-slider-item mui-control-content">
-						<div id="scroll2" class="mui-scroll-wrapper">
+						<div  class="mui-scroll-wrapper">
 							<div class="mui-scroll">
-								<div class="mui-row" style="">
+								<div class="mui-row" style="" id="vue6">
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row" style="padding: 10px 15px 10px 15px;">
-											<p style="font-size: 12px;color: black;">订单编号：413123164646 </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
+										<div class="mui-row" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} </p>
+											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/b.jpg">
+															<img width="100%" height="100" class="mui-media-object" :src="orderDetail.goodsImage | realImgPath">
 														</div>
 														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
+															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【{{orderDetail.brandName}}】{{orderDetail.goodsName}}</p>
+															<p v-for="(attr,index) in orderDetail.orderDetailAttrValues" style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">{{attr.attr}}:{{attr.attrValue}}</p>
 														</div>
 														<div class="mui-col-sm-4 mui-col-xs-4">
 															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
+																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">成交价:¥{{orderDetail.payPrice}}</p>
+																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2{{orderDetail.goodsNumber}}</p>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;">
-												<div class="mui-col-sm-12 mui-col-xs-12">
-													<div class="mui-row">
-														<div class="mui-col-sm-3 mui-col-xs-3">
-															<img width="100%" height="100" class="mui-media-object" src="../images/a.jpg">
-														</div>
-														<div class="mui-col-sm-5 mui-col-xs-5">
-															<p class='' style="margin-left: 5px; margin-top: 0px;margin-bottom: 0px;font-size: 12px; font-weight: 900;">【特步童装】特步童装介绍内容，名称等等内容</p>
-															<p style="margin-left: 5px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;">尺码:100</p>
-														</div>
-														<div class="mui-col-sm-4 mui-col-xs-4">
-															<div class="mui-pull-right">
-																<p style="margin-right: 10px; margin-top: 5px; text-decoration: line-through;margin-bottom: 0px;font-size: 12px;color: #888888;">¥100</p>
-																<p style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px;" style="mui-pull-right">¥50</p>
-																<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x2</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
+											
 											<div class="mui-row">
-												<p style="font-size: 12px;color: black;float:right">共1件商品 合计：¥69(含运费¥25)</p>
+												<p style="font-size: 12px;color: black;float:right">共{{order.orderDetails.length}}件商品 合计：¥{{order.orderAmount}}(含运费¥{{order.freight}})</p>
 											</div>
 											<div class="mui-row mui-pull-right">
-												<a class="mui-btn">查看物流</a>
-												<!--<a class="mui-btn " style="margin-left: 5px;">延长收货</a>-->
-												<a class="mui-btn mui-btn-primary" style="margin-left: 5px;">确认收货</a>
+												<template v-if="order.orderStatus == 1">
+													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
+												</template>
+												<template v-if="order.orderStatus == 3">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
+												</template>
+												<template v-if="order.orderStatus == 4">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+												</template>
+												<template v-if="order.orderStatus == 6">
+													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
+												</template>
 											</div>
 										</div>
 									</div>
@@ -478,6 +329,119 @@
 
 		</div>
 		<script>
+			//vuejs部分
+			Vue.filter("dateToStr", function(longtime, formatString) {
+				return dateUtil.dateToStr(new Date(longtime), formatString);
+			})
+			Vue.filter("realImgPath", function(img) {
+				return baseUpload + img;
+			})
+			Vue.filter("orderStatusStr", function(orderStatus) {
+				if(orderStatus ==1){
+					return "待付款"
+				}
+				if(orderStatus ==2){
+					return "待发货"
+				}
+				if(orderStatus ==3){
+					return "已发货"
+				}
+				if(orderStatus ==4){
+					return "交易完成"
+				}
+				if(orderStatus =6){
+					return "退货退款"
+				}
+			})
+			//加载数据方法
+			var pageVo = {
+				pageNumber: 1,
+				pageSize: 3,
+				memberId:myLocalStorage.getItem("member").id
+			}
+			var vue1 = new Vue({
+				el: '#vue1',
+				data: {
+					data: []
+				},
+				updated: function() {
+					this.$nextTick(function() {
+					})
+				}
+			});
+			var vue2 = new Vue({
+				el: '#vue2',
+				data: {
+					data: []
+				},
+				updated: function() {
+					this.$nextTick(function() {
+					})
+				}
+			});
+			var vue3 = new Vue({
+				el: '#vue3',
+				data: {
+					data: []
+				},
+				updated: function() {
+					this.$nextTick(function() {
+					})
+				}
+			});
+			var vue4 = new Vue({
+				el: '#vue4',
+				data: {
+					data: []
+				},
+				updated: function() {
+					this.$nextTick(function() {
+					})
+				}
+			});
+/*			var vue5 = new Vue({
+				el: '#vue5',
+				data: {
+					data: []
+				},
+				updated: function() {
+					this.$nextTick(function() {
+					})
+				}
+			});*/
+			var vue6 = new Vue({
+				el: '#vue6',
+				data: {
+					data: []
+				},
+				updated: function() {
+					this.$nextTick(function() {
+					})
+				}
+			});
+			
+			
+			function loadListNopage(orderStatus,vue){
+				$.ajax({
+					dataType: "json",
+					type: "post",
+					url: basePath + "order/getListNoPage",
+					data: {orderStatus:orderStatus,memberId:myLocalStorage.getItem("member").id},
+					success: function(result) {
+						if(result.success) {
+							vue.data = result.data;
+						} else {
+							mui.toast(result.message)
+						}
+
+					},
+					error: function(result) {
+						mui.toast("请求遇到问题!")
+					}
+				});
+			}
+			
+			
 			function initHeight() {
 				var titleH = $(".mui-title").height();
 				var sliderCH = $("#sliderSegmentedControl").height();
@@ -490,6 +454,10 @@
 			});
 			mui.ready(function() {
 				initHeight();
+				loadListNopage(1,vue2);
+				loadListNopage(2,vue3);
+				loadListNopage(3,vue4);
+				loadListNopage(6,vue6);
 
 				mui('#slider').slider().gotoItem(myLocalStorage.getItem("orderstate"));
 				mui('.mui-scroll-wrapper').scroll({
@@ -498,25 +466,67 @@
 
 				var count = 0;
 				// 刷新组件对象
-				var pullToRefresh = mui('#refresh_container').pullToRefresh({
+				var pullToRefresh1 = mui('#refresh_container').pullToRefresh({
 					down: {
 						callback: function() {
 							var _self = this;
 							setTimeout(function() {
-								_self.endPullDownToRefresh();
-							}, 1000);
+								pageVo.pageNumber = 1;
+								$.ajax({
+									dataType: "json",
+									type: "post",
+									url: basePath + "order/getList",
+									data: pageVo,
+									success: function(result) {
+										if(result.success) {
+											vue1.data = result.data;
+											pageVo.pageNumber += 1;
+											_self.endPullDownToRefresh();
+											_self.refresh(true);
+										} else {
+											mui.toast(result.message)
+										}
+
+									},
+									error: function(result) {
+										mui.toast("请求遇到问题!")
+									}
+								});
+							}, 500);
 						}
 					},
 					up: {
-						auto: false, //默认执行一次上拉加载
+						auto: true, //默认执行一次上拉加载
 						callback: function() {
 							var _self = this;
 							setTimeout(function() {
-								_self.endPullUpToRefresh(count++ > 1); //最后一页加载完成后禁用上拉
-							}, 1000);
+								$.ajax({
+									dataType: "json",
+									type: "post",
+									url: basePath + "order/getList",
+									data: pageVo,
+									success: function(result) {
+										if(result.success) {
+											vue1.data = vue1.data.concat(result.data); //把数组合并的结果设置成新值
+											_self.endPullUpToRefresh(result.pages <= pageVo.pageNumber);
+											pageVo.pageNumber += 1;
+										} else {
+											mui.toast(result.message)
+										}
+									},
+									error: function(result) {
+										mui.toast("请求遇到问题!")
+									}
+								});
+							}, 500);
 						}
 					}
 				});
+				
+				
+				
+				
+				
 			})
 		</script>
 
