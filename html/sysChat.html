@@ -54,50 +54,11 @@
 	</body>
 
 	<script>
-		//获取联系人未读消息数
-		OpenIm.prototype.getUsersUnreadMsgCount = function() {
-			var obj = this;
-
-			//var recentTribe = [];
-			//var unReadTotals = 0; //未读消息总条数
-			sdk.Base.getUnreadMsgCount({
-				count: 10, //一次获取的条数
-				success: function(data) {
-					console.log(data);
-					var list = data.data;
-					list.forEach(function(item) {
-						//前8位是chntribe表示群
-						if(item.contact.substring(0, 8) === 'chntribe') {
-							//recentTribe.push(item);
-						} else {
-							//document.write(item.contact.substring(8) + '在' + getLocalTime(item.timestamp) + ',');
-							//document.write('给我发了' + item.msgCount + '条消息，最后一条消息是在' + getLocalTime(item.lastmsgTime) + '发的<br />');
-							//unReadTotals += item.msgCount;
-							if(touid != item.contact.substring(8)) {
-								$('.n' + item.contact.substring(8)).text(item.msgCount);
-								$('.n' + item.contact.substring(8)).show();
-								console.log(item.contact.substring(8) + '给我发了' + item.msgCount + '条消息');
-							}
-						}
-					});
-					//document.write('未读消息总条数：', unReadTotals);
-				},
-				error: function(error) {
-					//document.write('获取未读消息的条数失败', error);
-				}
-			});
-		}
-
-		mui.init({
-			beforeback: function() {
-				mui.firePageEvent("msgCenter", "setMsgRead");
-			}
-		});
+		mui.init();
 		mui.ready(function() {
 			var member = myLocalStorage.getItem("member");
 			var config = myLocalStorage.getItem("config");
 			var touser = myLocalStorage.getItem("touser");
-
 			var audio = document.getElementById("audio");
 
 			window.onload = function() {
@@ -107,29 +68,27 @@
 					credential: member.phone + "abcd_123",
 					titleBar: false,
 					onLoginSuccess: function() {
-
+						//设置消息已读
+						WKIT.Conn.sdk.Chat.setReadState({
+							touid: touser,
+							hasPrefix: true,
+							timestamp: Math.floor((+new Date()) / 1000),
+							success: function(data) {
+								console.log(data)
+							},
+							error: function(data) {
+								console.log(data)
+							}
+						});
 					},
 					onLoginError: function() {
 						mui.toast("登录失败，请关闭重新打开！")
 					},
 					onMsgReceived: function() {
 						audio.play();
-						//设置消息已读
-						sdk.Chat.setReadState({
-							touid: myLocalStorage.getItem("touid"),
-							timestamp: Math.floor((+new Date()) / 1000),
-							success: function(data) {
-								console.log('设置已读成功', myLocalStorage.getItem("touid"));
-							},
-							error: function(error) {
-								console.log('设置已读失败', error);
-							}
-						});
 					},
 					container: document.getElementById('mui-content'),
 					touid: touser // 在百川控制台设置的E客服主账号
-					//sendMsgToCustomService: true
-					//groupId:'163428830'
 				});
 			}
 

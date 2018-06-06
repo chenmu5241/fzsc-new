@@ -82,6 +82,8 @@
 				myLocalStorage.setItem("touser", touser);
 				myLocalStorage.setItem("touid", touid);
 				openIm.setUserReadState(touid);
+				myLocalStorage.removeItem("goodsMsg");
+				myLocalStorage.removeItem("goodsMsgImg");
 				if(touser != "root") {
 					mui.openWindow({
 						url: "./chat.html",
