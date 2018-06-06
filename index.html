@@ -22,6 +22,8 @@
 		<script src="js/clipboard-polyfill.js"></script>
 		<script src="js/vue.min.js"></script>
 		<script src="js/dateUtil.js"></script>
+		<script src="https://g.alicdn.com/aliww/??h5.imsdk/2.1.5/scripts/yw/wsdk.js,h5.openim.kit/0.4.0/scripts/kit.js" charset="utf-8"></script>
+		<script src="../js/openIm.js"></script>
 		<style>
 			.mui-off-canvas-left,
 			.mui-off-canvas-right {
@@ -630,15 +632,15 @@
 				initHeader();
 				//加载品牌列表
 				loadBrandAll();
-				
-				mui("body").on("tap","#toCart",function(){
+
+				mui("body").on("tap", "#toCart", function() {
 					mui.openWindow({
-						url:"./html/cart.html",
-						id:"cart"
-						
+						url: "./html/cart.html",
+						id: "cart"
+
 					})
 				})
-				
+
 				//到商品列表页面
 				mui("body").on("tap", ".buy", function() {
 					myLocalStorage.setItem("brandId", $(this).attr("brandid"))
