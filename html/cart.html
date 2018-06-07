@@ -26,7 +26,7 @@
 
 		<div id="mui-content" class="mui-content" style="margin-bottom: 49px;" v-cloak>
 
-			<div class="mui-row" style="margin-top:10px;" v-for="(cart, index) in data" :key="cart.id">
+			<div class="mui-row" style="margin-top:10px;" v-for="(cart, index) in data" :key="cart.id"  :goodsId="cart.goodsId" :skuid="cart.goodsSkuId">
 				<div class="mui-col-sm-12 mui-col-xs-12">
 					<div class="mui-row" style="border-bottom:1px solid gainsboro;">
 						<div class=" mui-col-sm-2  mui-col-xs-2 mui-checkbox" style="vertical-align: bottom;">

@@ -238,7 +238,7 @@
 					<a class="mui-action-back mui-icon mui-icon-arrowthinleft"></a>
 					<h1 class="mui-title">商品列表</h1>
 					<div class="mui-title-div mui-pull-right" style="margin-right: 0px;">
-						<a id="toCard" class="mui-icon  mui-icon-extra mui-icon-extra-cart">
+						<a id="toCart" class="mui-icon  mui-icon-extra mui-icon-extra-cart">
 							<template v-if="data.cartNum>0">
 								<span class="mui-badge cartNum" style="top: 5px; margin-left: -18px;">{{data.cartNum}}</span>
 							</template>
@@ -538,10 +538,10 @@
 				};
 
 				//到购物车
-				mui("body").on("tap", "#toCard", function() {
+				mui("body").on("tap", "#toCart", function() {
 					mui.openWindow({
 						url: "./cart.html",
-						id: "card"
+						id: "cart"
 					})
 				})
 
@@ -687,19 +687,15 @@
 						skuidsAll.push($(this).attr("skuids").split(","))
 					})
 
-					var interArray = null;
-					for(var i = 0; i < skuidsAll.length - 1; i++) {
-						if(i == 0) {
-							interArray = Array.intersect(skuidsAll[0], skuidsAll[i + 1]);
-						} else {
-							interArray = Array.intersect(interArray, skuidsAll[i + 1]);
-						}
+					var interArray = skuidsAll[0];
+					for(var i = 1; i < skuidsAll.length; i++) {
+						interArray = Array.intersect(interArray, skuidsAll[i]);
 					}
 					var skuId = interArray[0].split(":")[0]; //得到skuId
 					$.ajax({
 						dataType: "json",
 						type: "post",
-						url: basePath + "/card/addCart",
+						url: basePath + "/cart/addCart",
 						data: {
 							skuId: skuId,
 							memberId: myLocalStorage.getItem("member").id

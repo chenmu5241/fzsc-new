@@ -50,7 +50,7 @@
 				</div>
 			</div>
 
-			<div class="mui-row" style="margin-left: 10px;" id="goodsVue">
+			<div class="mui-row" style="margin-left: 10px;" id="goodsVue" v-cloak>
 
 				<div class="mui-row" style="margin-top:10px;" v-for="(oneData, index) in data.listData" v-bind:key="index">
 					<div class="mui-col-sm-12 mui-col-xs-12">
@@ -84,6 +84,8 @@
 				<div class="mui-row">
 					<div class="mui-col-sm-3 mui-col-xs-3">配送方式</div>
 					<div class="mui-col-sm-9 mui-col-xs-9 mui-navigate-right">
+						<input type="hidden" name="expressName" id="expressName" value="中通快递" />
+						<input type="hidden" name="expressCode" id="expressCode" value="SF" />
 						<a class="mui-pull-right" id="chooseSendBtn" style="margin-right: 30px;">中通快递</a>
 					</div>
 				</div>
@@ -135,7 +137,7 @@
 			<div class="mui-content">
 				<div class="mui-scroll-wrapper mui-content" id="pullrefresh">
 					<div class="mui-scroll" id="refresh_container">
-						<div id="addressVue" style="margin-top:40px;">
+						<div id="addressVue" style="margin-top:40px;" v-cloak>
 							<div class="mui-row" style="border-bottom:1px solid gainsboro;" v-for="(address, index) in data" :key="address.id">
 								<div class=" mui-col-sm-2  mui-col-xs-2 mui-radio">
 									<input style="top:15px;" name="checkbox" :value="address.id" type="radio">
@@ -285,28 +287,57 @@
 			}]);
 
 			mui("body").on("tap", "#confirmBtn", function() {
-				mui.confirm("请选择支付方式!", "支付方式", ["支付宝", "微信"], function(e) {
+				mui.confirm("请选择支付方式!", "支付方式", ["支付宝", "微信", "取消"], function(e) {
+					var orderData = {};
+					orderData.memberId = myLocalStorage.getItem("member").id;
+					orderData.jiesuanData = myLocalStorage.getItem("jiesuanData");
+					orderData.addressId = $("#addressId").val();
+					orderData.remark = $("#orderRemark").val();
+					orderData.expressName = $("#expressName").val();
+					orderData.expressCode = $("#expressCode").val();
+					if(addressId == null && addressId == "") {
+						mui.toast("请选择收货地址!");
+					}
+					myLocalStorage.setItem("orderData", orderData);
+					document.write(JSON.stringify(orderData))
 					if(e.index == 0) {
-						var orderData = {};
-						orderData.jiesuanData = myLocalStorage.getItem("jiesuanData");
-						orderData.addressId = $("#addressId").val();
-						orderData.remark = $("#orderRemark").val();
-						if(addressId == null && addressId == "") {
-							mui.toast("请选择收货地址!");
-						}
-						myLocalStorage.setItem("orderData", orderData);
-						//这里需要生成订单，并且让用户使用支付宝支付订单，如果用户未支付成功则跳转到订单详情页，并且详情页留有支付按钮
-						
+						$.ajax({
+							dataType: "json",
+							type: "post",
+							async: false,
+							url: basePath + "order/createOrder",
+							data: {
+								orderDataStr: JSON.stringify(orderData)
+							},
+							success: function(result) {
+								if(result.success) {
+									//跳转到支付宝支付
+									
+								} else {
+									mui.toast(result.message)
+								}
+							},
+							error: function(result) {}
+						});
 					} else {
-						var orderData = {};
-						orderData.jiesuanData = myLocalStorage.getItem("jiesuanData");
-						orderData.addressId = $("#addressId").val();
-						orderData.remark = $("#orderRemark").val();
-						if(addressId == null && addressId == "") {
-							mui.toast("请选择收货地址!");
-						}
-						myLocalStorage.setItem("orderData", orderData);
-						//这里需要生成订单，并且让用户使用微信支付订单，如果用户未支付则跳转到订单详情页，并且详情页留有支付按钮
+						$.ajax({
+							dataType: "json",
+							type: "post",
+							async: false,
+							url: basePath + "order/createOrder",
+							data: {
+								orderDataStr: JSON.stringify(orderData)
+							},
+							success: function(result) {
+								if(result.success) {
+									//跳转到微信支付
+									
+								} else {
+									mui.toast(result.message)
+								}
+							},
+							error: function(result) {}
+						});
 					}
 				})
 			})
