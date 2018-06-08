@@ -79,7 +79,13 @@
 					<a class="mui-navigate-right">
 						<!--<img class="mui-media-object mui-pull-left head-img" id="head-img" src="../images/kf.jpg">-->
 						<div class="mui-media-body">
-							{{userData.nickname}}
+							<template v-if="userData.vip==0">
+								{{userData.nickname}}
+							</template>
+							<template v-if="userData.vip==1">
+								{{userData.nickname}}<span style="color:orange"> (vip会员)</span>
+							</template>
+							
 							<p class='mui-ellipsis'>{{userData.phone}}</p>
 						</div>
 					</a>
@@ -124,9 +130,12 @@
 				</div>
 			</div>
 			<ul class="mui-table-view mui-table-view-chevron">
-				<li class="mui-table-view-cell">
-					<a onclick="mui.toast('功能暂未开放')" class="mui-navigate-right">升级vip</a>
-				</li>
+				<template v-if="userData.vip==0">
+					<li class="mui-table-view-cell">
+						<a>会员：</a>
+						<a class="mui-btn mui-btn-primary">升级vip</a>
+					</li>
+				</template>
 				<li class="mui-table-view-cell ">
 					<a id="setting" class="mui-navigate-right">设置</a>
 				</li>
@@ -173,7 +182,7 @@
 				}
 			}
 		})
-
+		console.log(myLocalStorage.getItem("member"));
 		var myVue = new Vue({
 			el: '#mui-content',
 			data: {
