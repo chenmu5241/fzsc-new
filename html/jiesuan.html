@@ -15,6 +15,7 @@
 		<script src="../js/mui.poppicker.js"></script>
 		<script src="../js/vue.min.js"></script>
 		<script src="../js/app.js"></script>
+		<script src="../js/beecloud.js"></script>
 		<style>
 			.guige {
 				margin-left: 5px;
@@ -287,6 +288,9 @@
 			}]);
 
 			mui("body").on("tap", "#confirmBtn", function() {
+				beecloudPay("ALI_APP");
+				return
+				
 				mui.confirm("请选择支付方式!", "支付方式", ["支付宝", "微信", "取消"], function(e) {
 					var orderData = {};
 					orderData.memberId = myLocalStorage.getItem("member").id;
@@ -312,7 +316,7 @@
 							success: function(result) {
 								if(result.success) {
 									//跳转到支付宝支付
-									
+									beecloudPay("ALI_APP");
 								} else {
 									mui.toast(result.message)
 								}
@@ -331,7 +335,7 @@
 							success: function(result) {
 								if(result.success) {
 									//跳转到微信支付
-									
+									beecloudPay("WX_APP");
 								} else {
 									mui.toast(result.message)
 								}
@@ -343,6 +347,47 @@
 			})
 
 		})
+		
+		function beecloudPay(bcChannel) {
+			//因DCloud尚未申请银联账号，故支付宝、微信使用的是DCloud的appid，银联暂时使用BeeCloud的appid，开发者这里无需判断，直接写一个appid即可；
+			var _appid = bcChannel == "UN_WEB" ? "c37d661d-7e61-49ea-96a5-68c34e83db3b" : "44f01a13-965f-4b27-ba9f-da678b47f3f5"
+			/*
+			 * 构建支付参数
+			 * 
+			 * app_id: BeeCloud控制台上创建的APP的appid，必填 
+			 * title: 订单标题，32个字节，最长支持16个汉字；必填
+			 * total_fee: 支付金额，以分为单位，大于0的整数，必填
+			 * bill_no: 订单号，8~32位数字和/或字母组合,确保在商户系统中唯一，必填
+			 * optional: 扩展参数,可以传入任意数量的key/value对来补充对业务逻辑的需求;此参数会在webhook回调中返回; 选填
+			 * bill_timeout: 订单失效时间,必须为非零正整数，单位为秒，必须大于360。选填 
+			 */
+			var payData = {
+				app_id: _appid,
+				channel: bcChannel,
+				title: "DCloud项目捐赠",
+				total_fee: 1, //这里是以分为单位
+				bill_no: "abcd123456", //订单编号
+				optional: {
+					'uerId': 'beecloud',
+					'phone': '4006280728'
+				},
+				bill_timeout: 360,
+				return_url: "http://www.dcloud.io/demo/pay" //wap支付成功后的回跳地址
+			};
+			/*
+			 *  发起支付
+			 *  payData: 支付参数
+			 *  cbsuccess: 支付成功回调
+			 *  cberror: 支付失败回调
+			 */
+			beecloud.payReq(payData, function(result) {
+				console.log(e)
+			}, function(e) {
+				console.log(e)
+			});
+		}
+		
+		
 	</script>
 
 </html>

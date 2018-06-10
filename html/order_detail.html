@@ -128,23 +128,23 @@
 				</div>
 				<!--代付款状态可以取消订单,去支付-->
 				<template v-if="data.orderStatus == 1">
-					<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">取消订单</a>
-					<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-primary mui-btn-noradius">支付</a>
+					<a id='paybtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-success mui-btn-noradius">支付</a>
+					<a id='cancleBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">取消订单</a>
 				</template>
 				<!--已付款状态，但未发货状态，可以取消订单-->
 				<template v-if="data.orderStatus == 2">
-					<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">取消订单</a>
+					<a id='cancleBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">取消订单</a>
 				</template>
 				<!--已发货状态，可以退款退货，查看物流-->
 				<template v-if="data.orderStatus == 3">
-					<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-primary mui-btn-noradius">查看物流</a>
-					<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					<a id='seepost' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-primary mui-btn-noradius">查看物流</a>
+					<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
 				</template>
 				<!--已完成订单，可以退款退货，查看物流-->
 				<template v-if="data.orderStatus == 4">
 					<!--<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-primary mui-btn-noradius">评价</a>-->
-					<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-primary mui-btn-noradius">查看物流</a>
-					<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					<a id='seepost' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-primary mui-btn-noradius">查看物流</a>
+					<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
 				</template>
 
 			</nav>

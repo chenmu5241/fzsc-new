@@ -62,11 +62,11 @@
 							<div class="mui-scroll" id="refresh_container">
 								<div class="mui-row" style=""  id="vue1" v-cloak>
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row order" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+										<div class="mui-row " style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
 											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} 
 												<span class="mui-pull-right" style="color:red">{{order.orderStatus | orderStatusStr}}</span>
 											</p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
+											<div class="mui-row order" :orderid="order.id" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
@@ -118,9 +118,9 @@
 							<div class="mui-scroll">
 								<div class="mui-row" style=""  id="vue2" v-cloak>
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div  class="mui-row order" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+										<div  class="mui-row " style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
 											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
+											<div class="mui-row order" :orderid="order.id" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
@@ -170,9 +170,9 @@
 							<div class="mui-scroll">
 								<div class="mui-row" style="" id="vue3" v-cloak>
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row order" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+										<div class="mui-row " style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
 											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
+											<div class="mui-row order" :orderid="order.id" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
@@ -222,9 +222,9 @@
 							<div class="mui-scroll">
 								<div class="mui-row" style="" id="vue4" v-cloak>
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row order" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+										<div class="mui-row" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
 											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
+											<div class="mui-row order" :orderid="order.id" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
@@ -274,9 +274,9 @@
 							<div class="mui-scroll">
 								<div class="mui-row" style="" id="vue6" v-cloak>
 									<div class="mui-col-sm-12 mui-col-xs-12">
-										<div class="mui-row order" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
+										<div class="mui-row" style="padding: 10px 15px 10px 15px;"  v-for="(order, index) in data" v-bind:key="order.id" :orderid="order.id">
 											<p style="font-size: 12px;color: black;">订单编号：{{order.orderCode}} </p>
-											<div class="mui-row" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
+											<div class="mui-row order" :orderid="order.id" style="border-bottom:1px solid gainsboro;height: 110px;" v-for="(orderDetail, index) in order.orderDetails" v-bind:key="orderDetail.id" :orderdetailid="orderDetail.id">
 												<div class="mui-col-sm-12 mui-col-xs-12">
 													<div class="mui-row">
 														<div class="mui-col-sm-3 mui-col-xs-3">
@@ -528,9 +528,34 @@
 						url:"./order_detail.html",
 						id:"orderDetail"
 					})
-					
-					
 				})
+				
+				
+				
+				
+				mui("body").on("tap", ".topay", function() {
+					mui.confirm("请选择支付方式!", "支付方式", ["支付宝", "微信", "取消"], function(e) {
+						if(e.index == 0) {
+						} else {
+						}
+					})
+				})
+				
+				mui("body").on("tap", ".seepost", function() {
+					mui.openWindow({
+						url:"post_detail.html",
+						id:"postDetail"
+					})
+				})
+				
+				mui("body").on("tap", ".confirmrecieve", function() {
+					mui.confirm("确定已收货？","提示",["确定","取消"],function(e){
+						if(e.index==0){
+							mui.toast("确定收获成功")
+						}
+					})
+				})
+				
 				
 				
 			})

@@ -21,23 +21,7 @@ beecloud.genBillNo = function() {
 
 mui.plusReady(function() {
 	//配置业务支持的支付通道，支付需要服务端支持，在BeeCloud上支持支付宝支付和微信支付；
-	var support_channel = ['alipay'];
-	if(!mui.os.stream){//流应用下暂不支持微信SDK支付
-		support_channel.push('wxpay');
-	}
 	plus.payment.getChannels(function(s) {
-		var oauthArea = document.querySelector('.oauth-area');
-		for (var i = 0; i < s.length; i++) {
-			if(s[i].serviceReady){
-				if(~support_channel.indexOf(s[i].id)){
-					var btn = document.createElement('div');
-					btn.setAttribute('id', s[i].id);
-					btn.className = 'mui-btn mui-btn-blue mui-btn-block pay';
-					btn.innerText = s[i].description+'支付'
-					oauthArea.appendChild(btn);
-				}
-			}
-		}
 		channels = s;
 	}, function(e) {
 		console.log("获取支付渠道信权限失败:" + e.message);
