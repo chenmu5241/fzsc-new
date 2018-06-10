@@ -1,0 +1,83 @@
+{
+  "index.html": {
+    "refer": [
+      "html/userinfo.html",
+      "html/msgCenter.html",
+      "html/cart.html",
+      "html/goods_list.html"
+    ],
+    "resources": []
+  },
+  "login.html": {
+    "refer": [
+      "index.html",
+      "html/beecloud.html",
+      "zhifu.html"
+    ],
+    "resources": []
+  },
+  "html/address.html": {
+    "refer": [
+      "html/address_edit.html",
+      "html/userinfo.html",
+      "html/address_add.html"
+    ],
+    "resources": []
+  },
+  "html/userinfo.html": {
+    "refer": [
+      "html/address.html",
+      "login.html",
+      "html/cart.html",
+      "html/order.html",
+      "html/shuoming.html",
+      "html/chat.html",
+      "html/about.html",
+      "html/feedback.html",
+      "html/setting.html"
+    ],
+    "resources": []
+  },
+  "html/address_edit.html": {
+    "refer": [
+      "html/address.html"
+    ],
+    "resources": []
+  },
+  "html/msgCenter.html": {
+    "refer": [
+      "login.html"
+    ],
+    "resources": []
+  },
+  "html/cart.html": {
+    "refer": [
+      "login.html",
+      "html/jiesuan.html"
+    ],
+    "resources": []
+  },
+  "html/address_add.html": {
+    "refer": [
+      "html/address.html"
+    ],
+    "resources": []
+  },
+  "html/jiesuan.html": {
+    "refer": [
+      "login.html"
+    ],
+    "resources": []
+  },
+  "zhifu.html": {
+    "refer": [
+      "login.html"
+    ],
+    "resources": []
+  },
+  "html/goods_list.html": {
+    "refer": [
+      "html/cart.html"
+    ]
+  }
+}
