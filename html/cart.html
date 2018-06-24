@@ -31,7 +31,7 @@
 					<div class="mui-row" style="border-bottom:1px solid gainsboro;">
 						<div class=" mui-col-sm-2  mui-col-xs-2 mui-checkbox" style="vertical-align: bottom;">
 							<template v-if="cart.goodsSku.storageNum>0">
-								<input style="top:40px;" name="checkbox" :perprice="cart.goods | perPrice" onchange="countAmount()" :value="cart.id" type="checkbox">
+								<input style="top:40px;" name="checkbox" :perprice="cart.goods | perPrice" onchange="countAmount()" :value="cart.goodsSkuId" type="checkbox">
 							</template>
 						</div>
 						<div class="mui-col-sm-10 mui-col-xs-10">
@@ -132,6 +132,7 @@
 						$(".geprice").hide();
 						$(".vipprice").show();
 					}
+					countAmount();
 				})
 			}
 		});
@@ -154,7 +155,7 @@
 				jiesuanData.skus.push(sku);
 			})
 			$("#amount").text(amount);
-
+			console.log(JSON.stringify(jiesuanData));
 		}
 
 		mui.init();

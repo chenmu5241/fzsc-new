@@ -104,16 +104,16 @@
 				<div class="mui-row">
 					<div class="mui-col-sm-3 mui-col-xs-3">运费</div>
 					<div class="mui-col-sm-9 mui-col-xs-9 ">
-						<label class="mui-pull-right " style="margin-right: 30px;">+¥{{data.freightAmount}}</label>
+						<label class="mui-pull-right " style="margin-right: 30px;">+¥{{data.freight}}</label>
 					</div>
 				</div>
 			</div>
-			<div class="mui-row" style="margin-left: 10px;margin-top: 20px;background-color:#FAFAFA;color:#F0AD4E;font-size: 14px;">
+			<!--<div class="mui-row" style="margin-left: 10px;margin-top: 20px;background-color:#FAFAFA;color:#F0AD4E;font-size: 14px;">
 				<div class="mui-row">
 					<p>温馨提示：订单提交后，请于30分钟之内完成支付，超过30分钟，系统将自动取消订单。</p>
 				</div>
-			</div>
-			<div class="mui-row" style="margin-left: 10px;margin-top: 0px;margin-right:10px;">
+			</div>-->
+			<div class="mui-row" style="margin-left: 10px;margin-top: 20px;">
 				<label>备注</label>
 				<textarea placeholder="如果您有特殊需要，请输入备注信息" id="orderRemark"></textarea>
 			</div>
@@ -288,8 +288,8 @@
 			}]);
 
 			mui("body").on("tap", "#confirmBtn", function() {
-				beecloudPay("ALI_APP");
-				return
+				/*beecloudPay("ALI_APP");
+				return*/
 				
 				mui.confirm("请选择支付方式!", "支付方式", ["支付宝", "微信", "取消"], function(e) {
 					var orderData = {};
