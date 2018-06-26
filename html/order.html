@@ -93,13 +93,16 @@
 												<template v-if="order.orderStatus == 1">
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
+												<template v-if="order.orderStatus == 2">
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+												</template>
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
 													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -147,13 +150,16 @@
 												<template v-if="order.orderStatus == 1">
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
+												<template v-if="order.orderStatus == 2">
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+												</template>
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
 													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -199,13 +205,16 @@
 												<template v-if="order.orderStatus == 1">
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
+												<template v-if="order.orderStatus == 2">
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+												</template>
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
 													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -251,13 +260,16 @@
 												<template v-if="order.orderStatus == 1">
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
+												<template v-if="order.orderStatus == 2">
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+												</template>
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
 													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -303,13 +315,14 @@
 												<template v-if="order.orderStatus == 1">
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
+
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
 													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">申请退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -347,7 +360,7 @@
 				if(orderStatus ==4){
 					return "交易完成"
 				}
-				if(orderStatus =6){
+				if(orderStatus == 6){
 					return "退货退款"
 				}
 			})
@@ -365,6 +378,11 @@
 				updated: function() {
 					this.$nextTick(function() {
 					})
+				},
+				methods:{
+					pwd:function(){
+						alert(1)
+					}
 				}
 			});
 			var vue2 = new Vue({
@@ -521,7 +539,7 @@
 					}
 				});
 				
-				
+				//到订单详细
 				mui("body").on("tap",".order",function(){
 					myLocalStorage.setItem("orderId",$(this).attr("orderid"))
 					mui.openWindow({
@@ -530,9 +548,7 @@
 					})
 				})
 				
-				
-				
-				
+				//去支付
 				mui("body").on("tap", ".topay", function() {
 					mui.confirm("请选择支付方式!", "支付方式", ["支付宝", "微信", "取消"], function(e) {
 						if(e.index == 0) {
@@ -540,19 +556,27 @@
 						}
 					})
 				})
-				
+				//查看物流
 				mui("body").on("tap", ".seepost", function() {
 					mui.openWindow({
 						url:"post_detail.html",
 						id:"postDetail"
 					})
 				})
-				
+				//确认收货
 				mui("body").on("tap", ".confirmrecieve", function() {
 					mui.confirm("确定已收货？","提示",["确定","取消"],function(e){
 						if(e.index==0){
 							mui.toast("确定收获成功")
 						}
+					})
+				})
+				//申请退款页面
+				mui("body").on("tap", ".applayrefund", function() {
+					myLocalStorage.setItem("orderid",$(this).attr("orderid"))
+					mui.openWindow({
+						url:"refund.html",
+						id:"refund"
 					})
 				})
 				

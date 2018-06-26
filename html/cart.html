@@ -50,7 +50,7 @@
 										</div>
 										<div class="mui-col-sm-7 mui-col-xs-7">
 											<template v-if="cart.goodsSku.storageNum>0">
-												<div class="mui-numbox" data-numbox-min="0" style="width: 120px;height: 30px; margin-top:10px;" :data-numbox-max="cart.goodsSku.storageNum">
+												<div class="mui-numbox" data-numbox-min="0" style="width: 120px;height: 30px; margin-top:10px;" :data-numbox-max="cart.goodsSku.storageNum-cart.goodsSku.saleNum">
 													<button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
 													<input id="test" class="mui-input-numbox" type="number" :value="cart.goodsNum" onchange="countAmount()">
 													<button class="mui-btn mui-btn-numbox-plus" type="button">+</button>

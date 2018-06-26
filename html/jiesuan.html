@@ -26,7 +26,7 @@
 		</style>
 	</head>
 
-	<body>
+	<body  style="background-color: #FFFFFF;">
 		<header id="header" class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-arrowthinleft"></a>
 			<h1 class="mui-title">订单确认</h1>
@@ -290,7 +290,10 @@
 			mui("body").on("tap", "#confirmBtn", function() {
 				/*beecloudPay("ALI_APP");
 				return*/
-				
+				if($("#addressId").val() == null || $("#addressId").val() == "") {
+					mui.toast("请选择收货地址!");
+					return;
+				}
 				mui.confirm("请选择支付方式!", "支付方式", ["支付宝", "微信", "取消"], function(e) {
 					var orderData = {};
 					orderData.memberId = myLocalStorage.getItem("member").id;
@@ -299,9 +302,6 @@
 					orderData.remark = $("#orderRemark").val();
 					orderData.expressName = $("#expressName").val();
 					orderData.expressCode = $("#expressCode").val();
-					if(addressId == null && addressId == "") {
-						mui.toast("请选择收货地址!");
-					}
 					myLocalStorage.setItem("orderData", orderData);
 					document.write(JSON.stringify(orderData))
 					if(e.index == 0) {
