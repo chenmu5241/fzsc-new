@@ -476,6 +476,29 @@
 				loadListNopage(6,vue6);
 
 				mui('#slider').slider().gotoItem(myLocalStorage.getItem("orderstate"));
+				
+				document.querySelector('#slider').addEventListener('slide', function(event) {
+					switch (event.detail.slideNumber){
+						case 0:
+							myLocalStorage.removeItem("orderstate")
+							break;
+						case 1:
+							myLocalStorage.setItem("orderstate",1)
+							break;
+						case 2:
+							myLocalStorage.setItem("orderstate",2)
+							break;
+						case 3:
+							myLocalStorage.setItem("orderstate",3)
+							break;
+						case 4:
+							myLocalStorage.setItem("orderstate",6)
+							break;
+						default:
+							break;
+					}
+				});
+				
 				mui('.mui-scroll-wrapper').scroll({
 					indicators: true //是否显示滚动条
 				});
@@ -565,9 +588,29 @@
 				})
 				//确认收货
 				mui("body").on("tap", ".confirmrecieve", function() {
+					var orderId = $(this).attr("orderid");
 					mui.confirm("确定已收货？","提示",["确定","取消"],function(e){
 						if(e.index==0){
-							mui.toast("确定收获成功")
+							var param = {};
+							param.id=orderId;
+							param.orderStatus=4
+							$.ajax({
+									dataType: "json",
+									type: "post",
+									url: basePath + "order/update",
+									data: param,
+									success: function(result) {
+										if(result.success) {
+											pullToRefresh1.pullDownLoading();
+											loadListNopage(3,vue4);
+										} else {
+											mui.toast(result.message)
+										}
+									},
+									error: function(result) {
+										mui.toast("请求遇到问题!")
+									}
+								});
 						}
 					})
 				})
@@ -579,9 +622,6 @@
 						id:"refund"
 					})
 				})
-				
-				
-				
 			})
 		</script>
 
