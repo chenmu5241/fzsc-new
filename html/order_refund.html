@@ -56,19 +56,25 @@
 							<ul class="mui-table-view">
 								<!--仅流应用环境下显示-->
 								<li class="mui-table-view-cell stream">
-									<a href="#">桌面快捷方式创建失败</a>
+									<a href="#">拍错/不想要</a>
+								</li>
+								<li class="mui-table-view-cell stream">
+									<a href="#">与客服协商一致</a>
 								</li>
 								<li class="mui-table-view-cell">
-									<a href="#">界面显示错乱</a>
+									<a href="#">质量问题</a>
 								</li>
 								<li class="mui-table-view-cell">
-									<a href="#">启动缓慢，卡出翔了</a>
+									<a href="#">包装或商品破损</a>
 								</li>
 								<li class="mui-table-view-cell">
-									<a href="#">偶发性崩溃</a>
+									<a href="#">发错货</a>
 								</li>
 								<li class="mui-table-view-cell">
-									<a href="#">UI无法直视，丑哭了</a>
+									<a href="#">未按约定时间发货</a>
+								</li>
+								<li class="mui-table-view-cell">
+									<a href="#">商品贬值、发霉、有异物</a>
 								</li>
 							</ul>
 						</div>
@@ -77,19 +83,19 @@
 
 			</div>
 			<div class="row mui-input-row">
-				<textarea id='content' name="content" class="mui-input-clear question" placeholder="请详细描述你的问题和意见..."></textarea>
+				<textarea id='refundReason' name="refundReason" class="question" placeholder="请选择退货原因" readonly="readonly"></textarea>
 			</div>
 			<div class="mui-inline">退款类型</div>
 			<div class="mui-input-row">
-				<select class="mui-select">
+				<select class="mui-select" id="returnType">
 					<option value="">请选择</option>
-					<option value="1">未收到退款</option>
-					<option value="2">已收到到退款</option>
+					<option value="1">仅退款(物品未收到)</option>
+					<option value="2">退货退款（物品已收到）</option>
 				</select>
 			</div>
 			<div class="mui-inline">退款金额</div>
 			<div class="mui-input-row">
-				<input id='contact' name="contact" type="text" class="mui-input-clear contact" placeholder="退款金额" />
+				<input id='amount' readonly="readonly" name="amount" type="text" />
 			</div>
 			<button id='submit' class="mui-btn mui-btn-block mui-btn-primary" data-loading-text="执行中...">提交</button>
 		</div>
@@ -97,25 +103,45 @@
 		<script>
 			mui.init();
 			mui.ready(function() {
+				var amount;
+				var order = myLocalStorage.getItem("order");
+				if(order.orderStatus == 2){
+					amount = order.orderAmount;
+				}else{
+					amount = order.orderAmount-order.freight;
+				}
+				$("#amount").attr("placeholder","请输入退款金额，最大可退"+amount);
+				$("#amount").val(amount);
+				
 				mui("#popover").on("tap", "a", function() {
-					$("#content").val(this.text);
+					$("#refundReason").val(this.text);
 					mui("#popover").popover("hide")
 				})
 
 				mui("body").on("tap", "#submit", function() {
-					if($("#content").val().trim() == "") {
-						mui.toast("请输入要反馈的内容！");
+					if($("#refundReason").val().trim() == ""){
+						mui.toast("请选择原因！");
+						return;
+					}
+					if($("#returnType").val() == "") {
+						mui.toast("请选择退款类型！");
+						return;
+					}
+					if($("#amount").val() == "") {
+						mui.toast("请填写退款金额！");
+						return;
+					}
+					if($("#amount").val() > amount) {
+						mui.toast("退款金额不能超过"+amount+"");
 						return;
 					}
 					mui("#submit").button("loading");
 					$.ajax({
 						dataType: "json",
 						type: "post",
-						url: basePath + "feedback/add",
+						url: basePath + "order/refund",
 						data: {
-							content: $("#content").val(),
-							contact: $("#contact").val(),
-							memberId: myLocalStorage.getItem("member").id
+							orderId:myLocalStorage.getItem("orderId")
 						},
 						success: function(result) {
 							if(result.success) {

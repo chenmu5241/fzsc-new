@@ -618,8 +618,8 @@
 				mui("body").on("tap", ".applayrefund", function() {
 					myLocalStorage.setItem("orderid",$(this).attr("orderid"))
 					mui.openWindow({
-						url:"refund.html",
-						id:"refund"
+						url:"./order_detail.html",
+						id:"orderDetail"
 					})
 				})
 			})

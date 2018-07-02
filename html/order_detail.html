@@ -59,7 +59,7 @@
 				</div>
 			</div>
 
-			<div class="mui-row" style="margin-left: 10px;" >
+			<div class="mui-row" style="margin-left: 10px;">
 
 				<div class="mui-row" style="margin-top:10px;" v-for="(oneData, index) in data.orderDetails" v-bind:key="index">
 					<div class="mui-col-sm-12 mui-col-xs-12">
@@ -77,8 +77,11 @@
 										<div class="mui-pull-right">
 											<p class="vipprice" style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px; ">成交价¥{{oneData.payPrice}}</p>
 											<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x{{oneData.goodsNumber}}</p>
-											<template v-if="data.orderStatus==2 || data.orderStatus==3">
-												<a class="mui-btn  applayrefund">退换</a>
+											<template v-if="data.orderStatus==2 ">
+												<a class="mui-btn  applayrefund" :orderdetailid="oneData.id" :amount="oneData.goodsNumber*oneData.payPrice">退款</a>
+											</template>
+											<template v-if="data.orderStatus==3">
+												<a class="mui-btn  applayrefund" :orderdetailid="oneData.id" :amount="oneData.goodsNumber*oneData.payPrice">退货</a>
 											</template>
 										</div>
 									</div>
@@ -135,7 +138,8 @@
 				</template>
 				<!--已付款状态，但未发货状态，可以取消订单-->
 				<template v-if="data.orderStatus == 2">
-					<a id='cancleBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">取消订单</a>
+					<!--<a id='cancleBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">取消订单</a>-->
+					<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
 				</template>
 				<!--已发货状态，可以退款退货，查看物流-->
 				<template v-if="data.orderStatus == 3">
@@ -163,17 +167,17 @@
 			return baseUpload + img;
 		})
 		Vue.filter("formatOrderStatus", function(data) {
-			if(data == 1){
-				return "待付款"	
-			}else if(data ==2){
+			if(data == 1) {
+				return "待付款"
+			} else if(data == 2) {
 				return "待发货"
-			}else if(data==3){
+			} else if(data == 3) {
 				return "已发货"
-			} else if(data==4){
+			} else if(data == 4) {
 				return "已完成"
-			} else if(data==5){
+			} else if(data == 5) {
 				return "订单取消"
-			} else if(data==6){
+			} else if(data == 6) {
 				return "退款退货"
 			}
 		})
@@ -210,6 +214,90 @@
 		mui.init();
 		mui.ready(function() {
 			loadOrderDetail();
+			//订单支付
+			mui("body").on("tap", "#paybtn", function() {
+				mui.confirm("请选择支付方式!", "支付方式", ["支付宝", "微信", "取消"], function(e) {
+					if(e.index == 0) {
+						mui.toast("支付宝");
+					} else {
+						mui.toast("微信");
+					}
+				})
+			})
+
+			//取消订单
+			mui("body").on("tap", "#cancleBtn", function() {
+				mui.confirm("已付款订单取消后金额原路退还，确定要取消吗？", "提示", ["确定", "取消"], function(e) {
+					var cancelStatus = 2;
+					if(orderVue.data.orderStatus == 2){//已付款
+						cancelStatus = 1;
+					}
+					
+					if(e.index == 0) {
+						$.ajax({
+							dataType: "json",
+							type: "post",
+							url: basePath + "order/update",
+							data: {
+								id: myLocalStorage.getItem("orderId"),
+								orderStatus: 5,
+								cancelStatus:cancelStatus
+							},
+							success: function(result) {
+								if(result.success) {
+									loadOrderDetail();
+								} else {
+									mui.toast(result.message)
+								}
+							},
+							error: function(result) {}
+						});
+					}
+				})
+			})
+			//查看物流
+			mui("body").on("tap","#seepost",function(){
+				mui.openWindow({
+					url:"post_detail.html",
+					id:"postDetail"
+				})
+			})
+			//退货退款
+			mui("body").on("tap",".applayrefund",function(){
+					myLocalStorage.setItem("orderDetailId",$(this).attr("orderdetailid"))
+					myLocalStorage.setItem("maxRefundAmount",$(this).attr("amount"))
+					mui.openWindow({
+						url:"refund2.html",
+						id:"refund2"
+					})
+					return;
+				
+				if(orderVue.data.orderDetails.length==1){//如果订单详情只有一条，则直接到退订整个订单的页面
+					myLocalStorage.setItem("order",orderVue.data)
+					mui.openWindow({
+						url:"order_refund.html",
+						id:"orderRefund"
+					})
+				}else{
+					myLocalStorage.setItem("orderDetailId",$(this).attr("orderdetailid"))
+					//myLocalStorage.setItem("maxRefundAmount",orderVue.data.orderAmount)
+					mui.openWindow({
+						url:"order_refund1.html",
+						id:"orderRefund1"
+					})
+				}
+
+			})
+			
+			//退货退款
+			mui("body").on("tap","#refund",function(){
+				myLocalStorage.setItem("order",orderVue.data)
+				mui.openWindow({
+					url:"order_refund.html",
+					id:"orderRefund"
+				})
+			})
+
 		})
 	</script>
 
