@@ -252,12 +252,13 @@
 						<div class="mui-table-view" style="margin-top: 0px;" id="vue1" v-cloak>
 							<div class="mui-row">
 								<div class="mui-card mui-car-url" v-for="(goods, index) in data" :key="goods.id">
+									<h4>【{{goods.brandName}}】{{goods.name}} {{goods.code}}</h4>
 									<div class="mui-card-header mui-card-media" style="z-index:1;">
-										<div style="width:100%; height:100%;background-color:gray;opacity:.60;filter: alpha(opacity=60);position:absolute; top:0; left:0; z-index:1;">
-											<div class="mui-text-center" style="color:red;vertical-align:middle;font-weight: 900;font-size: 40px;margin-top: 40%;">光</div>
+										<div v-show="goods.storeNum==goods.saleNum" style="width:100%; height:100%;background-color:gray;opacity:.60;filter: alpha(opacity=60);position:absolute; top:0; left:0; z-index:1;">
+											<div class="mui-text-center" style="color:red;vertical-align:middle;font-weight: 900;font-size: 40px;margin-top: 30%;">光</div>
 										</div>
 										<div class="mui-row" >
-											<h4>【{{goods.brandName}}】{{goods.name}} {{goods.code}}</h4>
+											<!--<h4>【{{goods.brandName}}】{{goods.name}} {{goods.code}}</h4>-->
 											<div class="mui-col-sm-4 mui-col-xs-4" v-for="(img, index) in goods.goodsImgs" v-bind:key="img.id">
 												<img :src="img.url | realImgPath" width="100%" style="padding: 0 1px;" data-preview-src="" :data-preview-group="goods.id" />
 											</div>
