@@ -141,7 +141,8 @@
 						type: "post",
 						url: basePath + "order/refund",
 						data: {
-							orderId:myLocalStorage.getItem("orderId")
+							orderId:myLocalStorage.getItem("orderId"),
+							returnType:$("#returnType").val()
 						},
 						success: function(result) {
 							if(result.success) {
