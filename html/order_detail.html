@@ -37,7 +37,7 @@
 				<div class="mui-col-sm-3 mui-col-xs-3">订单编号</div>
 				<div class="mui-col-sm-9 mui-col-xs-9 ">
 					<p class="mui-pull-left">{{data.orderCode}}</p>
-					<p class="mui-pull-right" style="margin-right: 10px;color:red">{{data.orderStatus | formatOrderStatus}}</p>
+					<p class="mui-pull-right" style="margin-right: 10px;color:red">{{data.orderStatus | formatOrderStatus(data)}}</p>
 				</div>
 			</div>
 			<div class="mui-row" style="margin-top: 20px;margin-left: 10px;border-bottom:1px solid gainsboro;height: 40px;">
@@ -78,10 +78,10 @@
 											<p class="vipprice" style="margin-right: 10px; color: red;margin-top: 5px;margin-bottom: 0px;font-size: 12px; ">成交价¥{{oneData.payPrice}}</p>
 											<p style="margin-right: 10px; margin-top: 5px;margin-bottom: 0px;font-size: 12px;color: #888888;">x{{oneData.goodsNumber}}</p>
 											<template v-if="data.orderStatus==2 ">
-												<a class="mui-btn  applayrefund" :orderdetailid="oneData.id" :amount="oneData.goodsNumber*oneData.payPrice">退款</a>
+												<a class="mui-btn  applayrefund" :orderdetailid="oneData.id" :returnstatus="oneData.returnStatus" :amount="oneData.goodsNumber*oneData.payPrice">退款</a>
 											</template>
 											<template v-if="data.orderStatus==3">
-												<a class="mui-btn  applayrefund" :orderdetailid="oneData.id" :amount="oneData.goodsNumber*oneData.payPrice">退货</a>
+												<a class="mui-btn  applayrefund" :orderdetailid="oneData.id" :returnstatus="oneData.returnStatus" :amount="oneData.goodsNumber*oneData.payPrice">退货</a>
 											</template>
 										</div>
 									</div>
@@ -139,18 +139,33 @@
 				<!--已付款状态，但未发货状态，可以取消订单-->
 				<template v-if="data.orderStatus == 2">
 					<!--<a id='cancleBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">取消订单</a>-->
-					<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					<template v-if="data.refundStatus == 0">	
+						<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					</template>
+					<template v-if="data.refundStatus == 1">	
+						<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-disabled mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					</template>
 				</template>
 				<!--已发货状态，可以退款退货，查看物流-->
 				<template v-if="data.orderStatus == 3">
 					<a id='seepost' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-primary mui-btn-noradius">查看物流</a>
-					<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					<template v-if="data.refundStatus == 0">	
+						<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					</template>
+					<template v-if="data.refundStatus == 1">	
+						<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-disabled mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					</template>
 				</template>
 				<!--已完成订单，可以退款退货，查看物流-->
 				<template v-if="data.orderStatus == 4">
 					<!--<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-primary mui-btn-noradius">评价</a>-->
 					<a id='seepost' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-primary mui-btn-noradius">查看物流</a>
-					<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					<template v-if="data.refundStatus == 0">	
+						<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					</template>
+					<template v-if="data.refundStatus == 1">	
+						<a id='refund' style="height: 30px;top: 0px;color:white" class="mui-disabled mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">退货/退款</a>
+					</template>
 				</template>
 
 			</nav>
@@ -166,20 +181,25 @@
 		Vue.filter("realImgPath", function(img) {
 			return baseUpload + img;
 		})
-		Vue.filter("formatOrderStatus", function(data) {
-			if(data == 1) {
-				return "待付款"
-			} else if(data == 2) {
-				return "待发货"
-			} else if(data == 3) {
-				return "已发货"
-			} else if(data == 4) {
-				return "已完成"
-			} else if(data == 5) {
-				return "订单取消"
-			} else if(data == 6) {
-				return "退款退货"
+		Vue.filter("formatOrderStatus", function(data,order) {
+			if(order.refundStatus == 0){
+				if(data == 1) {
+					return "待付款"
+				} else if(data == 2) {
+					return "待发货"
+				} else if(data == 3) {
+					return "已发货"
+				} else if(data == 4) {
+					return "已完成"
+				} else if(data == 5) {
+					return "订单取消"
+				} else if(data == 6) {
+					return "交易关闭"
+				}
+			}else{
+				return "退货退款"
 			}
+
 		})
 
 		var orderVue = new Vue({
@@ -266,27 +286,28 @@
 			mui("body").on("tap",".applayrefund",function(){
 					myLocalStorage.setItem("orderDetailId",$(this).attr("orderdetailid"))
 					myLocalStorage.setItem("maxRefundAmount",$(this).attr("amount"))
-					mui.openWindow({
-						url:"refund2.html",
-						id:"refund2"
-					})
-					return;
-				
-				if(orderVue.data.orderDetails.length==1){//如果订单详情只有一条，则直接到退订整个订单的页面
-					myLocalStorage.setItem("order",orderVue.data)
-					mui.openWindow({
-						url:"order_refund.html",
-						id:"orderRefund"
-					})
-				}else{
-					myLocalStorage.setItem("orderDetailId",$(this).attr("orderdetailid"))
-					//myLocalStorage.setItem("maxRefundAmount",orderVue.data.orderAmount)
-					mui.openWindow({
-						url:"order_refund1.html",
-						id:"orderRefund1"
-					})
-				}
-
+					myLocalStorage.setItem("returnstatus",$(this).attr("returnstatus"))
+					if($(this).attr("returnstatus")==0){
+						if(orderVue.data.orderDetails.length==1){//如果订单详情只有一条，则直接到退订整个订单的页面
+							myLocalStorage.setItem("order",orderVue.data)
+							mui.openWindow({
+								url:"order_refund.html",
+								id:"orderRefund"
+							})
+						}else{
+							myLocalStorage.setItem("orderDetailId",$(this).attr("orderdetailid"))
+							//myLocalStorage.setItem("maxRefundAmount",orderVue.data.orderAmount)
+							mui.openWindow({
+								url:"order_refund1.html",
+								id:"orderRefund1"
+							})
+						}
+					}else{
+						mui.openWindow({
+							url:"refund_detail.html",
+							id:"refund_detail"
+						})
+					}
 			})
 			
 			//退货退款

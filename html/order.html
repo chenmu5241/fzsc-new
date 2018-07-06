@@ -85,7 +85,6 @@
 													</div>
 												</div>
 											</div>
-											
 											<div class="mui-row">
 												<p style="font-size: 12px;color: black;float:right">共{{order.orderDetails.length}}件商品 合计：¥{{order.orderAmount}}(含运费¥{{order.freight}})</p>
 											</div>
@@ -94,7 +93,7 @@
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
 												<template v-if="order.orderStatus == 2">
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -102,7 +101,7 @@
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -151,7 +150,7 @@
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
 												<template v-if="order.orderStatus == 2">
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -159,7 +158,7 @@
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -206,7 +205,7 @@
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
 												<template v-if="order.orderStatus == 2">
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -214,7 +213,7 @@
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -261,7 +260,7 @@
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
 												<template v-if="order.orderStatus == 2">
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -269,7 +268,7 @@
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -315,14 +314,16 @@
 												<template v-if="order.orderStatus == 1">
 													<a class="mui-btn mui-btn-primary  topay" :orderid="order.id">去支付</a>
 												</template>
-
+												<template v-if="order.orderStatus == 2">
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
+												</template>
 												<template v-if="order.orderStatus == 3">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
 													<a class="mui-btn mui-btn-primary confirmrecieve" :orderid="order.id">确认收货</a>
 												</template>
 												<template v-if="order.orderStatus == 4">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
-													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id">退货退款</a>
+													<a class="mui-btn mui-btn-primary applayrefund" :orderid="order.id" :refundstatus="order.refundStatus">退货退款</a>
 												</template>
 												<template v-if="order.orderStatus == 6">
 													<a class="mui-btn seepost" :orderid="order.id">查看物流</a>
@@ -437,12 +438,12 @@
 			});
 			
 			
-			function loadListNopage(orderStatus,vue){
+			function loadRefund(vue){
 				$.ajax({
 					dataType: "json",
 					type: "post",
 					url: basePath + "order/getListNoPage",
-					data: {orderStatus:orderStatus,memberId:myLocalStorage.getItem("member").id},
+					data: {refundStatus:1,memberId:myLocalStorage.getItem("member").id},
 					success: function(result) {
 						if(result.success) {
 							vue.data = result.data;
@@ -470,10 +471,10 @@
 			});
 			mui.ready(function() {
 				initHeight();
-				loadListNopage(1,vue2);
+/*				loadListNopage(1,vue2);
 				loadListNopage(2,vue3);
-				loadListNopage(3,vue4);
-				loadListNopage(6,vue6);
+				loadListNopage(3,vue4);*/
+				loadRefund(vue6);
 
 				mui('#slider').slider().gotoItem(myLocalStorage.getItem("orderstate"));
 				
@@ -617,6 +618,7 @@
 				//申请退款页面
 				mui("body").on("tap", ".applayrefund", function() {
 					myLocalStorage.setItem("orderid",$(this).attr("orderid"))
+					myLocalStorage.setItem("refundStatus",$(this).attr("refundStatus"))
 					mui.openWindow({
 						url:"./order_detail.html",
 						id:"orderDetail"

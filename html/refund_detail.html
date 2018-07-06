@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>服装商城</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/app.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<style>
+			/*跨webview需要手动指定位置*/
+			
+			#topPopover {
+				position: fixed;
+				top: 16px;
+				right: 6px;
+			}
+			
+			#topPopover .mui-popover-arrow {
+				left: auto;
+				right: 6px;
+			}
+			
+			p {
+				text-indent: 22px;
+			}
+			
+			.mui-popover {
+				height: 300px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-arrowthinleft"></a>
+			<h1 class="mui-title">退款详情</h1>
+		</header>
+		<div class="mui-content" id="mui-content">
+		</div>
+
+		<script>
+			var myVue = new Vue({
+				el: '#mui-content',
+				data: {
+					data: {}
+				},
+				updated: function() {
+					this.$nextTick(function() {})
+				}
+			});
+			
+		function loadOrderDetail() {
+			$.ajax({
+				dataType: "json",
+				type: "post",
+				url: basePath + "order/loadRefundReturn",
+				data: {
+					orderDetailId : myLocalStorage.getItem("orderDetailId"),
+				},
+				success: function(result) {
+					if(result.success) {
+						myVue.data = result.data;
+					} else {
+						mui.toast(result.message)
+					}
+				},
+				error: function(result) {}
+			});
+		}
+			
+			mui.init();
+			mui.ready(function() {
+				loadOrderDetail();
+				$("#amount").attr("placeholder","请输入退款金额，最大可退"+myLocalStorage.getItem("maxRefundAmount"));
+				$("#amount").val(myLocalStorage.getItem("maxRefundAmount"));
+				mui("#popover").on("tap", "a", function() {
+					$("#refundReason").val(this.text);
+					mui("#popover").popover("hide")
+				})
+
+				mui("body").on("tap", "#submit", function() {
+					if($("#refundReason").val().trim() == ""){
+						mui.toast("请选择原因！");
+						return;
+					}
+					if($("#returnType").val() == "") {
+						mui.toast("请选择退款类型！");
+						return;
+					}
+					if($("#amount").val() == "") {
+						mui.toast("请填写退款金额！");
+						return;
+					}
+					if($("#amount").val() > myLocalStorage.getItem("maxRefundAmount")) {
+						mui.toast("退款金额不能超过"+myLocalStorage.getItem("maxRefundAmount")+"");
+						return;
+					}
+					
+					mui("#submit").button("loading");
+					$.ajax({
+						dataType: "json",
+						type: "post",
+						url: basePath + "order/refundByOrderDetail",
+						data: {
+							orderDetailId : myLocalStorage.getItem("orderDetailId"),
+							refundReason :$("#refundReason").val(),
+							amount:$("#amount").val()
+						},
+						success: function(result) {
+							if(result.success) {
+								mui.toast("提交成功！")
+							} else {
+								mui.toast(result.message)
+							}
+							mui("#submit").button("reset");
+						},
+						error: function(result) {
+							mui("#submit").button("reset");
+						}
+					});
+				})
+			})
+		</script>
+	</body>
+
+</html>
