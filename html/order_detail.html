@@ -176,6 +176,9 @@
 
 	<script>
 		Vue.filter("dateToStr", function(longtime, formatString) {
+			if(longtime == null){
+				return "";
+			}
 			return dateUtil.dateToStr(new Date(longtime), formatString);
 		})
 		Vue.filter("realImgPath", function(img) {
