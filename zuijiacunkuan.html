@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">存款计算</h1>
+		</header>
+		<div class="mui-content">
+			<form id='form' class="mui-input-group">
+				<div class="mui-input-row">
+					<label>首年存储(元)</label>
+					<input id="firstYear"  type="text" value="10000" class="mui-input-clear mui-input" value="定期" >
+				</div>
+				<div class="mui-input-row">
+					<label>每年追加(元)</label>
+					<input id='perYearAmount'  type="text" class="mui-input-clear mui-input" value="10000" placeholder="追加金额">
+				</div>
+				<div class="mui-input-row">
+					<label>年利率(%)</label>
+					<input type="text" id="perYear" value="4" class="mui-input-clear mui-input" placeholder="年利率">
+				</div>
+				<div class="mui-input-row">
+					<label>存储年限</label>
+					<input type="text" id="countYear" value="15" class="mui-input-clear mui-input" placeholder="总共存几年">
+				</div>
+			</form>
+			<div class="mui-content-padded">
+				<button onclick="countAmount()" class="mui-btn mui-btn-block mui-btn-primary">计算</button>
+			</div>
+			<br />
+			<br />
+			<br />
+			<div class="row mui-text-center ">
+					<span>存续满的总金额<font color="red" id="amount">0</font>元</span>
+			</div>
+		</div>
+		<script src="js/jquery.min.js"></script>
+		<script>
+			function countAmount(){
+				var amount = parseInt($("#firstYear").val());
+				var countYear = parseInt($("#countYear").val());
+				for (var i=0; i<countYear; i++) {
+					amount *= 1+parseFloat($("#perYear").val())/100;
+					amount += parseInt($("#perYearAmount").val());
+				}
+				$("#amount").text(Math.ceil(amount));
+			}
+			
+			countAmount();
+
+		</script>
+	</body>
+
+	
+</html>
