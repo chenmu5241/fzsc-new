@@ -66,7 +66,7 @@
 				</div>
 			</form>
 			<div class="mui-content-padded">
-				<button id='confirm' class="mui-btn mui-btn-block mui-btn-primary">提交</button>
+				<button id='confirm' class="mui-btn mui-btn-block mui-btn-primary" data-loading-text="提交中...">提交</button>
 				<div class="link-area">
 					<a class="mui-action-back">返回登录</a>
 				</div>
@@ -134,6 +134,7 @@
 						return;
 					}
 
+					mui("#confirm").button("loading");
 					$.ajax({
 						dataType: "json",
 						type: "post",
@@ -145,9 +146,11 @@
 							} else {
 								mui.toast(result.message)
 							}
+							mui("#confirm").button("reset");
 						},
 						error: function(result) {
-							mui.toast("请求遇到问题!")
+							mui.toast("请求遇到问题!");
+							mui("#confirm").button("reset");
 						}
 					});
 				})

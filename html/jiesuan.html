@@ -125,7 +125,7 @@
 				</div>
 				<div class="mui-tab-item" href="cart.html">
 				</div>
-				<a id='confirmBtn' style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">提交订单</a>
+				<a id='confirmBtn' data-loading-text="提交中..."  style="height: 30px;top: 0px;color:white" class="mui-tab-item mui-btn mui-btn-danger mui-btn-noradius">提交订单</a>
 			</nav>
 
 		</div>
@@ -304,6 +304,7 @@
 					orderData.expressCode = $("#expressCode").val();
 					myLocalStorage.setItem("orderData", orderData);
 					document.write(JSON.stringify(orderData))
+					mui("#confirmBtn").button("loading");
 					if(e.index == 0) {
 						$.ajax({
 							dataType: "json",
@@ -320,8 +321,12 @@
 								} else {
 									mui.toast(result.message)
 								}
+								
+								mui("#confirmBtn").button("reset");
 							},
-							error: function(result) {}
+							error: function(result) {
+								mui("#confirmBtn").button("reset");
+							}
 						});
 					} else {
 						$.ajax({
@@ -339,8 +344,12 @@
 								} else {
 									mui.toast(result.message)
 								}
+								
+								mui("#confirmBtn").button("reset");
 							},
-							error: function(result) {}
+							error: function(result) {
+								mui("#confirmBtn").button("reset");
+							}
 						});
 					}
 				})

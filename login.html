@@ -25,7 +25,7 @@
 				</div>
 			</form>
 			<div class="mui-content-padded">
-				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+				<button id='login' data-loading-text="提交中..." class="mui-btn mui-btn-block mui-btn-primary">登录</button>
 				<div class="link-area">
 					<a href="reg.html">注册账号</a> <span class="spliter">|</span>
 					<a href="forgetpwd.html">忘记密码</a>
@@ -66,6 +66,7 @@
 						mui.toast("请输入密码！");
 						return false;
 					}
+					mui("#login").button("loading");
 					$.ajax({
 						dataType: "json",
 						type: "post",
@@ -78,10 +79,11 @@
 							} else {
 								mui.toast(result.message)
 							}
-
+							mui("#login").button("reset");
 						},
 						error: function(result) {
 							mui.toast("请求遇到问题!")
+							mui("#login").button("reset");
 						}
 					});
 

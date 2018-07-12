@@ -66,7 +66,7 @@
 				</div>
 			</form>
 			<div class="mui-content-padded">
-				<button id='reg' class="mui-btn mui-btn-block mui-btn-primary">注册</button>
+				<button id='reg' class="mui-btn mui-btn-block mui-btn-primary"  data-loading-text="提交中...">注册</button>
 				<div class="mui-input-row mui-checkbox mui-left">
 					<input name="agree" id="agree" type="checkbox"> <label style="width: 200px;">我已阅读并同意</label>
 					<a style="color: #F0AD4E;" href="html/contract.html">《注册服务协议》</a>
@@ -137,7 +137,7 @@
 						mui.toast("请先同意注册协议！");
 						return;
 					}
-
+					mui("#reg").button("loading");
 					$.ajax({
 						dataType: "json",
 						type: "post",
@@ -149,9 +149,11 @@
 							} else {
 								mui.toast(result.message)
 							}
+							mui("#reg").button("reset");
 						},
 						error: function(result) {
-							mui.toast("请求遇到问题!")
+							mui.toast("请求遇到问题!");
+							mui("#reg").button("reset");
 						}
 					});
 
