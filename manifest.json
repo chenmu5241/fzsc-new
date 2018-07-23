@@ -112,21 +112,21 @@
 				"ios": {
 					"iphone": {
 						"default": "", /*iPhone3启动图片选，分辨率：320x480*/
-						"retina35": "",/*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
-						"retina40": "",/*4.0 英寸设备(iPhone5/iPhone5s)启动图片，分辨率：640x1136*/
-						"retina47": "",/*4.7 英寸设备(iPhone6)启动图片，分辨率：750x1334*/
-						"retina55": "",/*5.5 英寸设备(iPhone6 Plus)启动图片，分辨率：1242x2208*/
-						"retina55l": ""
+						"retina35": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/640-960.png",/*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
+						"retina40": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/640-1136.png",/*4.0 英寸设备(iPhone5/iPhone5s)启动图片，分辨率：640x1136*/
+						"retina47": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/750-1334.png",/*4.7 英寸设备(iPhone6)启动图片，分辨率：750x1334*/
+						"retina55": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/1242-2208.png",/*5.5 英寸设备(iPhone6 Plus)启动图片，分辨率：1242x2208*/
+						"retina55l": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/2208-1242.png","iphonex":"F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/1125-2436.png","iphonexl":"F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/2436-1125.png"
 					},
 					"ipad": {
-						"portrait": "", /*iPad竖屏启动图片，分辨率：768x1004*/
-						"portrait-retina": "",/*iPad高分屏竖屏图片，分辨率：1536x2008*/
-						"landscape": "", /*iPad横屏启动图片，分辨率：1024x748*/
-						"landscape-retina": "", /*iPad高分屏横屏启动图片，分辨率：2048x1496*/
-						"portrait7": "", /*iPad iOS7竖屏启动图片，分辨率：768x1024*/
-						"portrait-retina7": "",/*iPad iOS7高分屏竖屏图片，分辨率：1536x2048*/
-						"landscape7": "", /*iPad iOS7横屏启动图片，分辨率：1024x768*/
-						"landscape-retina7": ""
+						"portrait": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/768-1004.png", /*iPad竖屏启动图片，分辨率：768x1004*/
+						"portrait-retina": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/1536-2008.png",/*iPad高分屏竖屏图片，分辨率：1536x2008*/
+						"landscape": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/1024-748.png", /*iPad横屏启动图片，分辨率：1024x748*/
+						"landscape-retina": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/2048-1496.png", /*iPad高分屏横屏启动图片，分辨率：2048x1496*/
+						"portrait7": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/768-1024.png", /*iPad iOS7竖屏启动图片，分辨率：768x1024*/
+						"portrait-retina7": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/1536-2048.png",/*iPad iOS7高分屏竖屏图片，分辨率：1536x2048*/
+						"landscape7": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/1024-768.png", /*iPad iOS7横屏启动图片，分辨率：1024x768*/
+						"landscape-retina7": "F:/work/项目资料/2018年项目/马来西亚FmmApp/06_Code/fmmapp/images/iphone/2048-1536.png"
 					}
 				},
 				"android": {

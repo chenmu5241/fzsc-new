@@ -11,6 +11,7 @@
 		<script src="../js/jquery.min.js"></script>
 		<script src="../js/vue.min.js"></script>
 		<script src="../js/dateUtil.js"></script>
+		<script src="../js/app.js"></script>
 		<style>
 			#ordertrack td {
 				vertical-align: top;
@@ -459,7 +460,7 @@
 							<div class="mh-list">
 								<ul>
 									<li :class="index == 0?'first':''" v-for="(item,index) of data">
-										<p>{{item.date}}</p>
+										<p>{{item.time}}</p>
 										<p>{{item.content}}</p>
 										<span class="before"></span><span class="after"></span><i :class="index == 0?'mh-icon mh-icon-new':''"></i><br />
 									</li>
@@ -506,48 +507,47 @@
 
 	<script>
 		Vue.filter("dateToStr", function(longtime, formatString) {
-			if(longtime == null){
+			if(longtime == null) {
 				return "";
 			}
 			return dateUtil.dateToStr(new Date(longtime), formatString);
 		})
 
-		var orderVue = new Vue({
+		var myVue = new Vue({
 			el: '#mui-content',
 			data: {
-				data: [
-					{date:"2015-04-28 11:23:28",content:"已签收，签收人是本人"},
-					{date:"2015-02-28 11:23:28",content:"运输过程中"},
-					{date:"2015-01-28 11:23:28",content:"已发货"}
-				]
+				data: []
 			},
 			updated: function() {
 				this.$nextTick(function() {})
 			}
 		});
 
-		function loadOrderDetail() {
+		function loadPostDetail() {
 			$.ajax({
 				dataType: "json",
-				type: "post",
-				url: basePath + "order/loadOrderDetail",
+				type: "get",
+				url: basePath + "post/loadData",
 				data: {
-					id: myLocalStorage.getItem("orderId")
+					no: "780098068058",
+					type: "zto"
 				},
 				success: function(result) {
 					if(result.success) {
-						orderVue.data = result.data;
+						myVue.data = result.data;
 					} else {
 						mui.toast(result.message)
 					}
 				},
-				error: function(result) {}
+				error: function(result) {
+					mui.toast("网络出错")
+				}
 			});
 		}
 
 		mui.init();
 		mui.ready(function() {
-			//loadOrderDetail();
+			loadPostDetail();
 		})
 	</script>
 
