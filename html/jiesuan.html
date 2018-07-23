@@ -85,9 +85,9 @@
 				<div class="mui-row">
 					<div class="mui-col-sm-3 mui-col-xs-3">配送方式</div>
 					<div class="mui-col-sm-9 mui-col-xs-9 mui-navigate-right">
-						<input type="hidden" name="expressName" id="expressName" value="中通快递" />
+						<input type="hidden" name="expressName" id="expressName" value="顺丰" />
 						<input type="hidden" name="expressCode" id="expressCode" value="SF" />
-						<a class="mui-pull-right" id="chooseSendBtn" style="margin-right: 30px;">中通快递</a>
+						<a class="mui-pull-right" id="chooseSendBtn" style="margin-right: 30px;">顺丰</a>
 					</div>
 				</div>
 			</div>
@@ -256,17 +256,34 @@
 			//选择快递
 			var picker = new mui.PopPicker();
 			picker.setData([{
-				value: "first",
+				value: "SF",
+				text: "顺丰"
+			}, {
+				value: "HTKY",
+				text: "百世快递"
+			}, {
+				value: "ZTO",
 				text: "中通"
 			}, {
-				value: "second",
+				value: "STO",
+				text: "申通"
+			}, {
+				value: "YTO",
 				text: "圆通"
 			}, {
-				value: "third",
-				text: "顺丰"
-			}])
+				value: "YD",
+				text: "韵达"
+			}, {
+				value: "邮政EMS",
+				text: "EMS"
+			}
+			])
 			mui("body").on("tap", "#chooseSendBtn", function() {
-				//picker.show();
+				picker.show(function(res){
+					$("#chooseSendBtn").text(res[0].text);
+					$("#expressName").val(res[0].text);
+					$("#expressCode").val(res[0].value);
+				});
 			})
 
 			mui("body").on("tap", "#confirmChoose", function() {
@@ -281,11 +298,6 @@
 					mui('#sheet1').popover('hide');
 				}
 			})
-			var picker = new mui.PopPicker();
-			picker.setData([{
-				value: 'zz',
-				text: '智子'
-			}]);
 
 			mui("body").on("tap", "#confirmBtn", function() {
 				/*beecloudPay("ALI_APP");
