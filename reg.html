@@ -64,6 +64,9 @@
 				<div class="mui-input-row">
 					<label>确认</label> <input id='password_confirm' type="password" class="mui-input-password" placeholder="请确认密码">
 				</div>
+				<div class="mui-input-row">
+					<label>邀请码</label> <input id='invitationCode' name="invitationCode" type="text" class="mui-input-clear" placeholder="请输入邀请码">
+				</div>
 			</form>
 			<div class="mui-content-padded">
 				<button id='reg' class="mui-btn mui-btn-block mui-btn-primary"  data-loading-text="提交中...">注册</button>
@@ -137,6 +140,14 @@
 						mui.toast("请先同意注册协议！");
 						return;
 					}
+					//系统配置需要邀请码时，邀请码不准为空
+					if(myLocalStorage.getItem("config").needInvitationCode == 1){
+						if(!$("#invitationCode").val().trim() == "") {
+							mui.toast("请输入邀请码！");
+							return;
+						}
+					}
+
 					mui("#reg").button("loading");
 					$.ajax({
 						dataType: "json",
