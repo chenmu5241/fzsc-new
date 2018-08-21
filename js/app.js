@@ -7,10 +7,14 @@
 	//封装localStorage
 	window.myLocalStorage = {};
 	myLocalStorage.setItem = function(key, value) {
-		if(value instanceof String) {
+		if(typeof value == "object"){
+			try{
+				localStorage.setItem(key, JSON.stringify(value))
+			} catch(e){
+				localStorage.setItem(key, value);
+			}
+		}else{
 			localStorage.setItem(key, value)
-		} else {
-			localStorage.setItem(key, JSON.stringify(value))
 		}
 	}
 
